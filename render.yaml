@@ -3,7 +3,7 @@ services:
     name: church-fund
     env: python
     buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
-    startCommand: "python manage.py migrate && python manage.py createadmin && gunicorn myproject.wsgi:application"
+    startCommand: "python manage.py migrate && python manage.py createadmin && python manage.py createadmin && gunicorn myproject.wsgi:application"
     envVars:
       - key: DEBUG
         value: False
