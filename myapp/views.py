@@ -16,6 +16,7 @@ from datetime import date, timedelta
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator
 from decimal import Decimal, ROUND_HALF_UP
+from django.contrib.auth.hashers import make_password
 
 # --- CORE VIEWS ---
 
@@ -725,6 +726,35 @@ def save_default_split(request):
     
 @require_http_methods(["POST"])
 @transaction.atomic
+def create_admin_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        
+        if Treasurer.objects.filter(username=username).exists():
+            return render(request, 'create_admin.html', {'error': 'Username already exists'})
+        
+        try:
+            admin = Treasurer.objects.create(
+                username=username,
+                email=email,
+                password=make_password(password),
+                first_name=first_name,
+                last_name=last_name,
+                is_staff=True,
+                is_superuser=True,
+                is_approved=True,
+                is_active=True
+            )
+            return render(request, 'create_admin.html', {'success': f'Admin {username} created successfully! You can now login.'})
+        except Exception as e:
+            return render(request, 'create_admin.html', {'error': f'Error creating admin: {e}'})
+    
+    return render(request, 'create_admin.html')
+
 def specific_multi_transaction(request):
     # This dictionary will store Fund ID -> Amount pairs
     fund_allocations = {}
