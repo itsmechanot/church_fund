@@ -812,23 +812,30 @@ def simple_create_admin(request):
 def create_admin_view(request):
     # Check if admin already exists
     if Treasurer.objects.filter(is_superuser=True).exists():
-        return render(request, 'create_admin.html', {'error': 'Admin already exists. Please login instead.'})
+        messages.error(request, 'Admin already exists. Please login instead.')
+        return redirect('login')
     
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
+        password_confirm = request.POST.get('password_confirm')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         
+        # Validation
+        if password != password_confirm:
+            messages.error(request, 'Passwords do not match')
+            return render(request, 'create_admin.html')
+            
         if Treasurer.objects.filter(username=username).exists():
-            return render(request, 'create_admin.html', {'error': 'Username already exists'})
+            messages.error(request, 'Username already exists')
+            return render(request, 'create_admin.html')
         
         try:
             admin = Treasurer.objects.create(
                 username=username,
                 email=email,
-                password=make_password(password),
                 first_name=first_name,
                 last_name=last_name,
                 is_staff=True,
@@ -836,9 +843,23 @@ def create_admin_view(request):
                 is_approved=True,
                 is_active=True
             )
-            return render(request, 'create_admin.html', {'success': f'Admin {username} created successfully! You can now login.'})
+            admin.set_password(password)  # Use set_password for proper hashing
+            admin.save()
+            
+            # Create General Fund if it doesn't exist
+            if not Fund.objects.filter(name='General Fund').exists():
+                Fund.objects.create(
+                    name='General Fund',
+                    description='Main church fund for general expenses',
+                    current_balance=Decimal('0.00'),
+                    default_percentage=Decimal('100.0'),
+                    created_by=admin
+                )
+            
+            messages.success(request, f'Admin {username} created successfully! You can now login.')
+            return render(request, 'setup_complete.html')
         except Exception as e:
-            return render(request, 'create_admin.html', {'error': f'Error creating admin: {e}'})
+            messages.error(request, f'Error creating admin: {e}')
     
     return render(request, 'create_admin.html')
 
