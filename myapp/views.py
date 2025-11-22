@@ -201,28 +201,36 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         
+        # Debug: Check if user exists
+        try:
+            user_exists = Treasurer.objects.get(username=username)
+            print(f"DEBUG: User {username} exists. Active: {user_exists.is_active}, Approved: {user_exists.is_approved}, Superuser: {user_exists.is_superuser}")
+        except Treasurer.DoesNotExist:
+            print(f"DEBUG: User {username} does not exist")
+            messages.error(request, f'User {username} not found.')
+            return render(request, 'login.html')
+        
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
+            print(f"DEBUG: Authentication successful for {username}")
             # 1. Check for Approval
             if user.is_approved:
                 login(request, user)
                 messages.success(request, f'Welcome back, {username}!')
                 
-                # 2. Check for Superuser Role and Redirect (NEW LOGIC)
+                # 2. Check for Superuser Role and Redirect
                 if user.is_superuser:
-                    # Redirect Superusers to the main Django Admin Index
-                    # or your custom dashboard
-                    return redirect('admin_transactions_dashboard') # <-- Redirect to the custom admin dashboard
+                    return redirect('admin_transactions_dashboard')
                 else:
-                    # Redirect Regular Treasurers to their profile or the main index
-                    return redirect('profile') # <-- Redirect regular Treasurers here
+                    return redirect('profile')
             else:
                 # User is authenticated but NOT approved
                 messages.error(request, 'Your account is pending administrator approval.')
                 
         else:
             # User is NOT authenticated (invalid credentials)
+            print(f"DEBUG: Authentication failed for {username}")
             messages.error(request, 'Invalid username or password.')
     
     return render(request, 'login.html')
@@ -728,25 +736,15 @@ def save_default_split(request):
 @transaction.atomic
 def debug_admin_view(request):
     import os
-    from django.contrib.auth.hashers import check_password
     
     users = Treasurer.objects.all()
-    total_users = users.count()
-    superuser_count = users.filter(is_superuser=True).count()
-    
-    # Add password check info
-    for user in users:
-        user.has_usable_password = user.has_usable_password()
-    
     context = {
         'users': users,
-        'total_users': total_users,
-        'superuser_count': superuser_count,
+        'total_users': users.count(),
         'admin_username': os.environ.get('ADMIN_USERNAME', 'Not set'),
-        'admin_email': os.environ.get('ADMIN_EMAIL', 'Not set'),
         'admin_password_set': bool(os.environ.get('ADMIN_PASSWORD')),
     }
-    return render(request, 'debug_admin.html', context)
+    return render(request, 'simple_debug.html', context)
 
 def create_admin_view(request):
     # Check if admin already exists

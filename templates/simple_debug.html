@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head><title>Debug</title></head>
+<body>
+<h1>Debug Info</h1>
+<p>Total Users: {{ total_users }}</p>
+<p>Admin Username from ENV: {{ admin_username }}</p>
+<p>Admin Password Set: {{ admin_password_set }}</p>
+{% for user in users %}
+<div style="border:1px solid #ccc; margin:10px; padding:10px;">
+<strong>{{ user.username }}</strong><br>
+Active: {{ user.is_active }}<br>
+Staff: {{ user.is_staff }}<br>
+Superuser: {{ user.is_superuser }}<br>
+Approved: {{ user.is_approved }}<br>
+</div>
+{% endfor %}
+<a href="/login/">Login</a>
+</body>
+</html>
