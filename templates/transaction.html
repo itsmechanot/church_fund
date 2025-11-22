@@ -12,7 +12,7 @@
     <script src="https://kit.fontawesome.com/YOUR_FONT_AWESOME_KIT.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <a class="back-button" href="{% url 'index' %}#funds-page">
+    <a class="back-button" href="{% if user.is_superuser %}{% url 'admin_transactions_dashboard' %}{% else %}{% url 'index' %}#funds-page{% endif %}">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" 
                   stroke-linecap="round" stroke-linejoin="round"/>

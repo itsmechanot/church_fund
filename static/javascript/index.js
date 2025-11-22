@@ -40,6 +40,24 @@ function setFundBalance(fundType, newAmount) {
     }
 }
 
+// --- ADMIN BACK BUTTON LOGIC ---
+function handleAdminBackButton(currentPageId) {
+    const adminBackButton = document.getElementById('adminBackButton');
+    const hamburgerMenu = document.getElementById('hamburgerMenu');
+    
+    if (adminBackButton && hamburgerMenu) {
+        if (currentPageId === 'withdraw-page') {
+            // Show admin back button, hide hamburger menu
+            adminBackButton.style.display = 'flex';
+            hamburgerMenu.style.display = 'none';
+        } else {
+            // Hide admin back button, show hamburger menu
+            adminBackButton.style.display = 'none';
+            hamburgerMenu.style.display = 'flex';
+        }
+    }
+}
+
 // --- NAVIGATION & PROFILE LOGIC (ADJUSTED) ---
 
 const navLinks = document.querySelectorAll('.nav-menu a');
@@ -79,7 +97,10 @@ function activatePage(targetId) {
         setTimeout(initializeCharts, 100); 
     }
     
-    // 5. Scroll to the top of the window
+    // 5. Handle admin back button visibility
+    handleAdminBackButton(targetId);
+    
+    // 6. Scroll to the top of the window
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -542,6 +563,56 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+// --- HAMBURGER MENU FUNCTIONALITY ---
+document.addEventListener('DOMContentLoaded', function() {
+    const hamburgerMenu = document.getElementById('hamburgerMenu');
+    const navRight = document.getElementById('navRight');
+    const body = document.body;
+    
+    // Create overlay element
+    const overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
+    overlay.id = 'navOverlay';
+    body.appendChild(overlay);
+    
+    // Toggle mobile menu
+    function toggleMobileMenu() {
+        hamburgerMenu.classList.toggle('active');
+        navRight.classList.toggle('active');
+        overlay.classList.toggle('active');
+        body.classList.toggle('nav-open');
+    }
+    
+    // Close mobile menu
+    function closeMobileMenu() {
+        hamburgerMenu.classList.remove('active');
+        navRight.classList.remove('active');
+        overlay.classList.remove('active');
+        body.classList.remove('nav-open');
+    }
+    
+    // Hamburger menu click
+    if (hamburgerMenu) {
+        hamburgerMenu.addEventListener('click', toggleMobileMenu);
+    }
+    
+    // Overlay click to close
+    overlay.addEventListener('click', closeMobileMenu);
+    
+    // Close menu when navigation link is clicked
+    const navLinks = document.querySelectorAll('.nav-menu a, .mobile-profile-links a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', closeMobileMenu);
+    });
+    
+    // Close menu on window resize if screen becomes larger
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            closeMobileMenu();
+        }
+    });
+});
+
 // --- HASH-BASED NAVIGATION INITIALIZATION (FIX) ---
 // This handles direct link access (e.g., /#funds-page) and browser history (back/forward)
 document.addEventListener('DOMContentLoaded', function() {
@@ -557,7 +628,10 @@ document.addEventListener('DOMContentLoaded', function() {
     } 
 
     // Activate the determined page on load
-    activatePage(pageToActivate); 
+    activatePage(pageToActivate);
+    
+    // Handle admin back button on initial load
+    handleAdminBackButton(pageToActivate); 
     
     // Handle browser back/forward buttons (popstate event)
     window.addEventListener('popstate', function() {

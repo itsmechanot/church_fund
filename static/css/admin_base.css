@@ -1,9 +1,10 @@
 /* Enhanced Admin Dashboard Styles */
 
+/* Mobile-first approach */
 .parent {
     display: grid;
     grid-template-columns: 200px repeat(4, 1fr); 
-    grid-template-rows: 50px repeat(4, 1fr); 
+    grid-template-rows: auto repeat(4, 1fr); 
     gap: 15px;
     grid-template-areas: 
         "nav banner banner banner banner" 
@@ -26,6 +27,7 @@
     padding: 20px 0;
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    overflow-x: auto;
 }
 
 .sidenav h4 {
@@ -95,6 +97,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     background-color: white;
     overflow: auto;
+    min-height: 200px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     /* Reverted position to default */
     position: static; 
@@ -368,6 +371,192 @@
     .sidenav a {
         padding: 10px 12px;
         font-size: 0.9em;
+    }
+}
+
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+    .parent {
+        grid-template-columns: 160px repeat(3, 1fr);
+        grid-template-areas: 
+            "nav banner banner banner" 
+            "nav admin-info pending approved" 
+            "nav admin-info pending approved" 
+            "nav boxA boxA boxB"
+            "nav boxA boxA boxB";
+        gap: 12px;
+        padding: 12px;
+    }
+    
+    .sidenav h4 {
+        font-size: 1em;
+        padding: 0 10px 10px;
+    }
+    
+    .sidenav a {
+        padding: 8px 10px;
+        font-size: 0.85em;
+        margin: 3px 8px;
+    }
+    
+    .banner {
+        font-size: 1.1em;
+        padding: 8px 15px;
+        min-height: 40px;
+    }
+    
+    .grid-item {
+        padding: 15px;
+    }
+    
+    .grid-item h5 {
+        font-size: 1em;
+        margin-bottom: 15px;
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .parent {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        grid-template-areas: 
+            "banner" 
+            "nav" 
+            "admin-info" 
+            "pending" 
+            "approved" 
+            "boxA" 
+            "boxB";
+        gap: 15px;
+        padding: 10px;
+        min-height: auto;
+    }
+    
+    .sidenav {
+        padding: 15px;
+        border-radius: 8px;
+    }
+    
+    .sidenav h4 {
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 1.1em;
+    }
+    
+    .sidenav a {
+        display: inline-block;
+        margin: 5px;
+        padding: 8px 15px;
+        text-align: center;
+        min-width: 80px;
+    }
+    
+    .banner {
+        text-align: center;
+        font-size: 1.1em;
+        padding: 10px 15px;
+        min-height: 35px;
+    }
+    
+    .grid-item {
+        padding: 15px;
+    }
+    
+    .grid-item h5 {
+        font-size: 1.1em;
+        text-align: center;
+    }
+    
+    /* Mobile table adjustments */
+    .table {
+        font-size: 0.8em;
+    }
+    
+    .table thead th {
+        padding: 8px 4px;
+        font-size: 0.75em;
+    }
+    
+    .table tbody td {
+        padding: 8px 4px;
+    }
+    
+    .btn {
+        padding: 4px 8px;
+        font-size: 0.75em;
+    }
+    
+    /* Admin info mobile layout */
+    .admin-info p {
+        font-size: 0.9em;
+        margin-bottom: 8px;
+    }
+    
+    /* Pending users mobile */
+    .pending-users .list-group-item {
+        padding: 10px 0;
+        font-size: 0.9em;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .parent {
+        padding: 8px;
+        gap: 12px;
+    }
+    
+    .sidenav {
+        padding: 12px;
+    }
+    
+    .sidenav a {
+        display: block;
+        margin: 3px 0;
+        padding: 10px;
+        text-align: center;
+    }
+    
+    .banner {
+        font-size: 0.95em;
+        padding: 8px 12px;
+        min-height: 30px;
+    }
+    
+    .grid-item {
+        padding: 12px;
+    }
+    
+    .grid-item h5 {
+        font-size: 1em;
+        margin-bottom: 12px;
+    }
+    
+    .table {
+        font-size: 0.75em;
+    }
+    
+    .table thead th {
+        padding: 6px 2px;
+        font-size: 0.7em;
+    }
+    
+    .table tbody td {
+        padding: 6px 2px;
+    }
+    
+    .btn {
+        padding: 3px 6px;
+        font-size: 0.7em;
+    }
+    
+    .admin-info p {
+        font-size: 0.85em;
+    }
+    
+    .pending-users .list-group-item {
+        font-size: 0.85em;
     }
 }
 

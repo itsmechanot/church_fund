@@ -26,7 +26,7 @@
     display: flex;
     align-items: center;
     gap: 15px;
-    margin: 0;
+    margin: 50px 0 0 0;
 }
 
 .page-header h1 i {
@@ -175,6 +175,13 @@
     overflow: hidden;
 }
 
+@media (max-width: 768px) {
+    .table-wrapper {
+        padding: 13px;
+        background: #f8f9fa;
+    }
+}
+
 /* Transaction Table */
 .transaction-table {
     width: 100%;
@@ -186,12 +193,12 @@
 }
 
 .transaction-table th {
-    padding: 18px 15px;
+    padding: 12px 12px;
     text-align: left;
     color: white;
     font-weight: 600;
     text-transform: uppercase;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     letter-spacing: 0.5px;
 }
 
@@ -210,9 +217,10 @@
 }
 
 .transaction-table td {
-    padding: 16px 15px;
+    padding: 10px 12px;
     color: #495057;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    line-height: 1.3;
 }
 
 .transaction-table td i {
@@ -224,13 +232,13 @@
 .badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.85rem;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
 }
 
 .badge-offering {
@@ -254,7 +262,7 @@
 /* Amount Styling */
 .amount-value {
     font-weight: 700;
-    font-size: 1.05rem;
+    font-size: 0.95rem;
 }
 
 .amount-offering {
@@ -272,6 +280,7 @@
     font-weight: 600;
     text-decoration: underline dotted;
     white-space: nowrap;
+    font-size: 0.85rem;
 }
 
 .split-info i {
@@ -281,11 +290,11 @@
 /* Actions Cell */
 .actions-cell {
     text-align: center;
-    width: 120px; /* Increased width to fit two buttons */
+    width: 90px;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
 }
 
 .actions-cell form {
@@ -297,11 +306,11 @@
     background: none;
     border: none;
     color: #3498db;
-    padding: 8px 12px;
-    border-radius: 6px;
+    padding: 6px 8px;
+    border-radius: 4px;
     cursor: pointer;
     transition: transform 0.3s ease;
-    font-size: 1rem;
+    font-size: 0.85rem;
 }
 
 .details-toggle-btn:hover {
@@ -317,10 +326,11 @@
     color: rgb(132, 127, 127);
     background: none;
     border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
+    padding: 6px 8px;
+    border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-size: 0.85rem;
 }
 
 .delete-btn:hover {
@@ -341,8 +351,7 @@
 }
 
 .details-row.hidden {
-    visibility: collapse; 
-    line-height: 0;
+    display: none;
 }
 
 .details-row td {
@@ -352,9 +361,9 @@
 .details-content {
     display: flex;
     flex-wrap: wrap;
-    padding: 20px 40px;
-    gap: 40px;
-    line-height: 1.5; 
+    padding: 8px 12px;
+    gap: 15px;
+    line-height: 1.2; 
 }
 
 .details-section {
@@ -362,15 +371,15 @@
 }
 
 .details-section h4 {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #2c3e50;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     font-weight: 600;
 }
 
 .details-section p {
-    margin: 5px 0;
-    font-size: 0.95rem;
+    margin: 3px 0;
+    font-size: 0.85rem;
     color: #555;
 }
 
@@ -383,8 +392,9 @@
 .split-list li {
     display: flex;
     justify-content: space-between;
-    padding: 6px 0;
+    padding: 4px 0;
     border-bottom: 1px dashed #e1e4e8;
+    font-size: 0.85rem;
 }
 
 .split-list li:last-child {
@@ -520,36 +530,65 @@
 
 @media (max-width: 768px) {
     .transaction-container {
-        padding: 15px;
+        padding: 10px;
+        margin: 20px auto;
     }
 
     .page-header {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
+        gap: 15px;
+        margin-bottom: 25px;
     }
 
     .page-header h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    .page-header h1 i {
+        font-size: 1.6rem;
     }
 
     .total-balance-badge {
         width: 100%;
         align-items: center;
+        padding: 12px 20px;
+    }
+
+    .balance-amount {
+        font-size: 1.6rem;
     }
 
     .controls-section {
-        padding: 20px;
+        padding: 15px;
     }
     
     .filter-form {
-        grid-template-columns: 1fr; /* Stack filters vertically */
+        grid-template-columns: 1fr;
+        gap: 15px;
     }
+    
+    .filter-group,
+    .search-group {
+        gap: 6px;
+    }
+    
+    .filter-form select,
+    .filter-form input[type="text"] {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+    }
+    
     .apply-btn {
         grid-column: auto;
+        padding: 12px 20px;
+        min-height: 44px;
     }
+    
     .clear-filters-container {
         grid-column: auto;
-        margin-top: 0;
+        margin-top: 10px;
     }
 
     /* Mobile Table Layout */
@@ -563,15 +602,17 @@
 
     .transaction-table tbody {
         display: block;
+        width: calc(100% + 3px);
     }
 
     .transaction-table tbody tr {
         display: block;
-        margin-bottom: 20px;
-        border: 2px solid #e9ecef;
-        border-radius: 12px;
-        padding: 15px;
+        margin-bottom: 6px;
+        border: 1px solid #e9ecef;
+        border-radius: 6px;
+        padding: 6px;
         background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
 
     .transaction-table tbody tr:hover {
@@ -583,20 +624,26 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 12px 0;
-        border-bottom: 1px solid #f1f1f1;
+        padding: 3px 0;
+        border-bottom: 1px solid #f8f9fa;
+        font-size: 0.7rem;
     }
     
-    /* Ensure action buttons are on the same line in mobile */
     .actions-cell {
         justify-content: flex-end;
+        gap: 8px;
+    }
+    
+    .details-toggle-btn,
+    .delete-btn {
+        padding: 6px 10px;
+        font-size: 0.9rem;
     }
 
     .transaction-table td:last-child {
         border-bottom: none;
     }
     
-    /* Hiding the details content label on the mobile details row */
     .details-row td::before {
         content: none;
     }
@@ -610,38 +657,204 @@
         font-weight: 600;
         color: #2c3e50;
         flex-shrink: 0;
-        margin-right: 15px;
+        margin-right: 6px;
+        font-size: 0.65rem;
+    }
+    
+    .badge {
+        padding: 2px 6px;
+        font-size: 0.6rem;
+    }
+    
+    .amount-value {
+        font-size: 0.75rem;
+    }
+    
+    .split-info {
+        font-size: 0.65rem;
     }
 
     .pagination-controls {
         flex-direction: column;
         gap: 15px;
         text-align: center;
+        margin-top: 20px;
     }
 
     .pagination-buttons {
         width: 100%;
         justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .pagination-buttons button {
+        padding: 8px 16px;
+        font-size: 0.9rem;
     }
     
     .details-content {
         flex-direction: column;
-        padding: 15px 20px;
-        gap: 20px;
+        padding: 4px 6px;
+        gap: 4px;
+    }
+    
+    .details-section h4 {
+        font-size: 0.75rem;
+        margin-bottom: 4px;
+    }
+    
+    .details-section p {
+        font-size: 0.7rem;
+        margin: 2px 0;
+    }
+    
+    .split-list li {
+        font-size: 0.7rem;
+    }
+    
+    .no-transactions {
+        padding: 60px 20px;
+    }
+    
+    .no-transactions i {
+        font-size: 3rem;
+    }
+    
+    .no-transactions h3 {
+        font-size: 1.3rem;
     }
 }
 
 @media (max-width: 480px) {
+    .transaction-container {
+        padding: 8px;
+        margin: 15px auto;
+    }
+    
     .page-header h1 {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
+    }
+    
+    .page-header h1 i {
+        font-size: 1.4rem;
     }
 
     .balance-amount {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+    }
+    
+    .balance-label {
+        font-size: 0.8rem;
+    }
+    
+    .total-balance-badge {
+        padding: 10px 15px;
+    }
+    
+    .controls-section {
+        padding: 12px;
+    }
+    
+    .filter-form {
+        gap: 12px;
+    }
+    
+    .filter-form select,
+    .filter-form input[type="text"] {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+    
+    .apply-btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        min-height: 40px;
+    }
+    
+    .transaction-table tbody tr {
+        padding: 3px;
+        margin-bottom: 3px;
+    }
+    
+    .transaction-table td {
+        padding: 2px 0;
+        font-size: 0.65rem;
+    }
+    
+    .transaction-table td::before {
+        font-size: 0.7rem;
+    }
+    
+    .badge {
+        padding: 1px 4px;
+        font-size: 0.55rem;
+    }
+    
+    .amount-value {
+        font-size: 0.75rem;
+    }
+    
+    .details-toggle-btn,
+    .delete-btn {
+        padding: 4px 8px;
+        font-size: 0.8rem;
+    }
+    
+    .actions-cell {
+        gap: 6px;
     }
 
+    .pagination-buttons {
+        gap: 8px;
+    }
+    
     .pagination-buttons button {
-        padding: 8px 16px;
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .current-page-number {
+        font-size: 0.9rem;
+        padding: 0 8px;
+    }
+    
+    .pagination-info {
+        font-size: 0.85rem;
+    }
+    
+    .details-content {
+        padding: 3px 4px;
+        gap: 3px;
+    }
+    
+    .details-section h4 {
+        font-size: 0.7rem;
+        margin-bottom: 3px;
+    }
+    
+    .details-section p {
+        font-size: 0.65rem;
+        margin: 1px 0;
+    }
+    
+    .split-list li {
+        padding: 2px 0;
+        font-size: 0.65rem;
+    }
+    
+    .no-transactions {
+        padding: 40px 15px;
+    }
+    
+    .no-transactions i {
+        font-size: 2.5rem;
+    }
+    
+    .no-transactions h3 {
+        font-size: 1.2rem;
+    }
+    
+    .no-transactions p {
         font-size: 0.9rem;
     }
 }

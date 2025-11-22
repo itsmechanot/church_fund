@@ -109,7 +109,20 @@ def is_superuser(user):
 def admin_transactions_view(request):
     current_admin = request.user
 
-    all_transactions = Transaction.objects.all().select_related('fund', 'created_by').order_by('-transaction_date')
+    all_transactions = Transaction.objects.all().select_related('fund', 'created_by').prefetch_related('splits').order_by('-transaction_date')
+
+    # Add fund display logic for each transaction
+    for transaction in all_transactions:
+        if transaction.splits.exists():
+            # This is a split transaction
+            split_count = transaction.splits.count()
+            transaction.fund_display = f"Split to {split_count} funds"
+        elif transaction.fund:
+            # This is a single fund transaction
+            transaction.fund_display = transaction.fund.name
+        else:
+            # Fallback for any edge cases
+            transaction.fund_display = "Unknown"
 
     pending_treasurers = Treasurer.objects.filter(is_approved=False, is_superuser=False).order_by('date_created')
 

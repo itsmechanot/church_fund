@@ -102,6 +102,118 @@ h1, h2 {
     background: #f0f0f0;
 }
 
+/* ========== HAMBURGER MENU STYLES ========== */
+.hamburger-menu {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1001;
+}
+
+.hamburger-menu span {
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.hamburger-menu.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-menu.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-menu.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Admin Back Button */
+.admin-back-button {
+    display: none;
+    align-items: center;
+    padding: 10px;
+    z-index: 1001;
+}
+
+/* Hide mobile admin back button on desktop */
+@media (min-width: 769px) {
+    .admin-back-button {
+        display: none !important;
+    }
+}
+
+.admin-back-button .back-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: none;
+    color: #333;
+    text-decoration: none;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.admin-back-button .back-link:hover {
+    color: #4361ee;
+    transform: translateY(-2px);
+}
+
+/* Admin Back Button for Desktop */
+.admin-back-button-desktop {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-right: 15px;
+}
+
+.admin-back-button-desktop .back-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: none;
+    color: #333;
+    text-decoration: none;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.admin-back-button-desktop .back-link:hover {
+    color: #4361ee;
+    transform: translateY(-2px);
+}
+
+/* Hide desktop admin back button on mobile */
+@media (max-width: 768px) {
+    .admin-back-button-desktop {
+        display: none;
+    }
+}
+
+/* Mobile Navigation Overlay */
+.nav-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.nav-overlay.active {
+    display: block;
+}
+
 /* ========== PAGE SECTION STYLES ========== */
 .page {
     display: none;
@@ -295,6 +407,33 @@ h1, h2 {
         @media (max-width: 1100px) {
             .funds-content-grid {
                 grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .funds-header {
+                text-align: center;
+            }
+            
+            .funds-controls {
+                justify-content: center;
+                width: 100%;
+            }
+            
+            .offerings-section {
+                text-align: center;
+            }
+        }
+        
+        /* Ensure content doesn't get hidden behind mobile nav */
+        @media (max-width: 768px) {
+            body.nav-open {
+                overflow: hidden;
+            }
+            
+            /* Hide any visible navigation elements on mobile */
+            .nav-right:not(.active) {
+                display: none;
             }
         }
 
@@ -814,22 +953,444 @@ h1, h2 {
 }
 
 /* ========== RESPONSIVE STYLES ========== */
+
+/* Tablet Styles */
+@media (max-width: 1024px) {
+    .nav {
+        padding: 10px;
+    }
+    
+    .logo-section img {
+        height: 80px;
+        width: 85px;
+        margin-left: 10px;
+    }
+    
+    .nav-menu ul li {
+        margin: 0 10px;
+    }
+    
+    .nav-menu ul li a {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .main-content h1 {
+        font-size: 4rem;
+    }
+    
+    .main-content h2 {
+        font-size: 5rem;
+    }
+    
+    .main-content blockquote {
+        font-size: 1.5rem;
+        max-width: 350px;
+    }
+    
+    .funds-title {
+        font-size: 2rem;
+    }
+    
+    .funds-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .funds-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+}
+
+/* Mobile Styles */
 @media (max-width: 768px) {
+    .nav {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+        position: relative;
+    }
+    
+    .hamburger-menu {
+        display: flex;
+    }
+    
+    .nav-right {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        height: 100vh;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+        transition: right 0.3s ease;
+        z-index: 1000;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        margin-right: 0;
+    }
+    
+    .nav-right.active {
+        right: 0;
+    }
+    
+    .nav-menu {
+        width: 100%;
+    }
+    
+    .nav-menu ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        margin-left: 0;
+        padding: 0;
+    }
+    
+    .nav-menu ul li {
+        margin: 0;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .nav-menu ul li a {
+        display: block;
+        padding: 15px 20px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+    }
+    
+    .nav-menu ul li a:hover,
+    .nav-menu ul li a.active {
+        background: #4361ee;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+    }
+    
+    /* Hide profile icon and dropdown in mobile */
+    .profile-menu {
+        display: none;
+    }
+    
+    /* Mobile profile links - styled like navigation items */
+    .mobile-profile-links {
+        width: 100%;
+        margin-top: 20px;
+    }
+    
+    .mobile-profile-links a {
+        display: block;
+        padding: 15px 20px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+        background: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+        margin-bottom: 15px;
+        border: 2px solid #e9ecef;
+    }
+    
+    .mobile-profile-links a:hover {
+        background: #6c757d;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+    }
+    
+    .logo-section img {
+        height: 70px;
+        width: 75px;
+        margin-left: 0;
+    }
+    
+    .page {
+        padding: 20px 15px;
+    }
+    
+    .main-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .main-content h2 {
+        font-size: 3rem;
+    }
+    
+    .main-content blockquote {
+        font-size: 1.2rem;
+        max-width: 280px;
+        padding: 10px 20px;
+    }
+    
+    /* Funds Page Mobile */
+    #funds-page {
+        padding: 20px 10px;
+    }
+    
+    .funds-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .funds-title {
+        font-size: 1.8rem;
+        text-align: center;
+        width: 100%;
+    }
+    
+    .funds-controls {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .funds-btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    .offerings-section {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+        padding: 20px;
+    }
+    
+    .offerings-input {
+        width: 100%;
+        margin: 10px 0;
+    }
+    
+    .funds-content-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .funds-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .fund-card {
+        padding: 15px;
+    }
+    
+    .fund-amount {
+        font-size: 1.5rem;
+    }
+    
+    .funds-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .funds-stat-value {
+        font-size: 1.5rem;
+    }
+    
+    .funds-chart-container {
+        height: 250px;
+    }
+    
+    .funds-selector {
+        justify-content: center;
+    }
+    
+    .funds-tab {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    /* Withdraw Page Mobile */
+    #withdraw-page .withdraw-enhanced {
+        margin: 0 10px;
+        padding: 20px;
+    }
+    
+    #withdraw-page .form-title {
+        font-size: 1.3rem;
+        text-align: center;
+    }
+    
+    #withdraw-page #withdraw-amount,
+    #withdraw-page .modern-textarea {
+        width: 90%;
+    }
+    
+    /* Modal Mobile */
+    .funds-modal-content {
+        width: 95%;
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    .funds-modal-title {
+        font-size: 1.3rem;
+    }
+    
+    .funds-modal-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .funds-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Organizational Chart Mobile */
     .tree-level {
         flex-direction: column;
         align-items: center;
     }
-
+    
     .tree-node {
         margin: 10px 0;
     }
-
+    
     .tree-node::after {
         display: none;
     }
-
+    
     .tree-node::before {
         height: 20px;
         top: -20px;
+    }
+    
+    .box {
+        width: 150px;
+        padding: 12px;
+    }
+    
+    .box img {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .box strong {
+        font-size: 1rem;
+    }
+    
+    .box .role {
+        font-size: 0.8rem;
+    }
+}
+
+/* Small Mobile Styles */
+@media (max-width: 480px) {
+    .nav-right {
+        width: 100%;
+        right: -100%;
+        padding: 60px 30px;
+    }
+    
+    .nav-right.active {
+        right: 0;
+    }
+    
+    .nav-menu ul li a {
+        font-size: 1.1rem;
+        padding: 18px 25px;
+    }
+    
+    .mobile-profile-links a {
+        font-size: 1.1rem;
+        padding: 18px 25px;
+    }
+    
+    .main-content h1 {
+        font-size: 2rem;
+    }
+    
+    .main-content h2 {
+        font-size: 2.5rem;
+    }
+    
+    .main-content blockquote {
+        font-size: 1rem;
+        max-width: 250px;
+    }
+    
+    .funds-title {
+        font-size: 1.5rem;
+    }
+    
+    .funds-controls {
+        flex-direction: column;
+    }
+    
+    .funds-btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .offerings-section {
+        padding: 15px;
+    }
+    
+    .funds-section-title {
+        font-size: 1.2rem;
+    }
+    
+    .fund-amount {
+        font-size: 1.3rem;
+    }
+    
+    .funds-stat-value {
+        font-size: 1.2rem;
+    }
+    
+    .funds-chart-container {
+        height: 200px;
+    }
+    
+    .funds-tab {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+    
+    #withdraw-page .form-title {
+        font-size: 1.1rem;
+    }
+    
+    .box {
+        width: 130px;
+        padding: 10px;
+    }
+    
+    .box img {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .box strong {
+        font-size: 0.9rem;
+    }
+    
+    .box .role {
+        font-size: 0.75rem;
+    }
+}
+
+/* Hide mobile profile links on desktop */
+@media (min-width: 769px) {
+    .mobile-profile-links {
+        display: none;
     }
 }

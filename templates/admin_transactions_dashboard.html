@@ -10,12 +10,12 @@
         <h4 style="color: white; padding: 0 15px;">Admin Menu</h4>
         <a href="{% url 'admin_transactions_dashboard' %}">Dashboard</a>
         <a href="{% url 'admin:myapp_treasurer_changelist' %}">Manage Treasurers</a>
-        <a href="{% url 'admin:index' %}">Model Administration</a>
+        <a href="{% url 'index' %}#withdraw-page">Withdraw</a>
         <a href="{% url 'logout' %}">Logout</a>
     </div> 
     
     <div class="grid-item banner">
-        Welcome, **{{ user.get_full_name|default:user.username }}**!
+        Welcome, {{ user.get_full_name|default:user.username }}!
     </div>
     
     <div class="grid-item admin-info">
@@ -88,7 +88,12 @@
     
 
     <div class="grid-item box-a">
-        <h5>Transaction History Summary</h5>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h5 style="margin: 0;">Transaction History Summary</h5>
+            <a href="{% url 'transactions_list' %}" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-list"></i> View All
+            </a>
+        </div>
         <table class="table table-sm table-striped">
             <thead>
                 <tr>
@@ -103,7 +108,7 @@
                     <td>{{ transaction.transaction_date|date:"m/d" }}</td>
                     <td>{{ transaction.transaction_type|capfirst }}</td>
                     <td>₱{{ transaction.amount|intcomma }}</td>
-                    <td>{{ transaction.fund.name }}</td>
+                    <td>{{ transaction.fund_display }}</td>
                 </tr>
                 {% empty %}
                 <tr><td colspan="4">No recent transactions.</td></tr>
