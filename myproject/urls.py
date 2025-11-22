@@ -28,4 +28,5 @@ urlpatterns = [
     path('treasurers/<int:pk>/disable/', views.disable_treasurer_view, name='disable_treasurer'),
     path('treasurers/enable/<int:pk>/', views.enable_treasurer, name='enable_treasurer'),
     path('create-admin/', views.create_admin_view, name='create_admin'),
+    path('debug-admin/', views.debug_admin_view, name='debug_admin'),
 ]

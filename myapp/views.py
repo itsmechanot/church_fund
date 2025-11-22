@@ -726,6 +726,28 @@ def save_default_split(request):
     
 @require_http_methods(["POST"])
 @transaction.atomic
+def debug_admin_view(request):
+    import os
+    from django.contrib.auth.hashers import check_password
+    
+    users = Treasurer.objects.all()
+    total_users = users.count()
+    superuser_count = users.filter(is_superuser=True).count()
+    
+    # Add password check info
+    for user in users:
+        user.has_usable_password = user.has_usable_password()
+    
+    context = {
+        'users': users,
+        'total_users': total_users,
+        'superuser_count': superuser_count,
+        'admin_username': os.environ.get('ADMIN_USERNAME', 'Not set'),
+        'admin_email': os.environ.get('ADMIN_EMAIL', 'Not set'),
+        'admin_password_set': bool(os.environ.get('ADMIN_PASSWORD')),
+    }
+    return render(request, 'debug_admin.html', context)
+
 def create_admin_view(request):
     # Check if admin already exists
     if Treasurer.objects.filter(is_superuser=True).exists():
