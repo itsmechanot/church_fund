@@ -1,21 +1,26 @@
+import os
 from django.core.management.base import BaseCommand
 from myapp.models import Treasurer
 
 class Command(BaseCommand):
-    help = 'Create admin user'
+    help = 'Create admin user from environment variables'
 
     def handle(self, *args, **options):
-        if not Treasurer.objects.filter(username='admin').exists():
+        username = os.environ.get('ADMIN_USERNAME', 'admin')
+        password = os.environ.get('ADMIN_PASSWORD', 'admin123')
+        email = os.environ.get('ADMIN_EMAIL', 'admin@churchfund.com')
+        
+        if not Treasurer.objects.filter(username=username).exists():
             admin = Treasurer.objects.create_user(
-                username='admin',
-                email='admin@churchfund.com',
-                password='admin123',
+                username=username,
+                email=email,
+                password=password,
                 first_name='Admin',
                 last_name='User',
                 is_staff=True,
                 is_superuser=True,
                 is_approved=True
             )
-            self.stdout.write('Admin user created successfully!')
+            self.stdout.write(f'Admin user {username} created successfully!')
         else:
-            self.stdout.write('Admin user already exists!')
+            self.stdout.write(f'Admin user {username} already exists!')
