@@ -7,7 +7,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-ob(kvm^6*fsy^2qjqtbjl
 
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = ['church-fund.onrender.com', 'localhost', '127.0.0.1']
 
 AUTH_USER_MODEL = 'myapp.Treasurer'
 
