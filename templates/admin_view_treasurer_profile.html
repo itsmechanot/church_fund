@@ -1,0 +1,217 @@
+{% extends "admin_base.html" %}
+{% load humanize %}
+{% block title %}Treasurer Profile: {{ treasurer.username }}{% endblock %}
+
+{% block content %}
+<style>
+    /* NOTE: It is highly recommended to place this CSS in your external stylesheet 
+    (e.g., admin_base.css) instead of using a <style> tag.
+    */
+    .parent {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+        gap: 8px;
+        height: 80vh; /* Added to make the 5 rows visible */
+        padding: 15px;
+    }
+    .div1 {
+        grid-row: span 5 / span 5;
+    }
+    .div2 {
+        grid-column: span 2 / span 2;
+        grid-row: span 3 / span 3;
+    }
+    .div3 {
+        grid-row: span 3 / span 3;
+        grid-column-start: 4;
+    }
+    .div4 {
+        grid-row: span 3 / span 3;
+        grid-column-start: 5;
+    }
+    .div5 {
+        grid-column: span 2 / span 2;
+        grid-row: span 2 / span 2;
+        grid-column-start: 2;
+        grid-row-start: 4;
+    }
+    .div6 {
+        grid-column: span 2 / span 2;
+        grid-row: span 2 / span 2;
+        grid-column-start: 4;
+        grid-row-start: 4;
+    }
+    .grid-item {
+        padding: 15px;
+        border-radius: 6px;
+        /* Ensure content takes up the full grid area */
+        height: 100%; 
+        width: 100%;
+        box-sizing: border-box;
+    }
+</style>
+
+<div class="parent">
+    
+    <div class="div1 grid-item bg-light border">
+        <h4 class="text-primary mb-4">Treasurer Menu</h4>
+        
+        <a href="{% url 'admin_transactions_dashboard' %}" class="btn btn-secondary w-100 mb-3">
+            &larr; Back to Dashboard
+        </a>
+        <a href="{% url 'admin:myapp_treasurer_change' treasurer.pk %}" class="btn btn-outline-primary w-100 mb-3">
+            Edit Treasurer Details
+        </a>
+        
+        <h6 class="mt-4 border-top pt-3">Account Status</h6>
+        {% if treasurer.is_active %}
+            <span class="badge bg-success fs-5">Active</span>
+        {% else %}
+            <span class="badge bg-danger fs-5">Disabled</span>
+            <a href="{% url 'enable_treasurer' pk=treasurer.pk %}" class="btn btn-sm btn-warning d-block mt-3">Enable Account</a>
+        {% endif %}
+    </div>
+
+    <div class="div2 grid-item bg-white shadow-sm border">
+        <h4 class="border-bottom pb-2">Profile Details</h4>
+        <p class="h5 mt-3">
+            {{ treasurer.get_full_name|default:treasurer.username }}
+        </p>
+        <p><strong>Username:</strong> {{ treasurer.username }}</p>
+        <p><strong>Email:</strong> {{ treasurer.email }}</p>
+        <p><strong>Branch:</strong> {{ treasurer.church_branch }}</p>
+        <p><strong>Position:</strong> {{ treasurer.position }}</p>
+        <p><strong>Date Joined:</strong> {{ treasurer.date_joined|date:"M d, Y" }}</p>
+    </div>
+
+    <div class="div3 grid-item bg-primary text-white shadow">
+        <div class="card-body">
+            <h5 class="card-title text-uppercase">Total Funds Managed</h5>
+            <p class="card-text display-4 fw-bold mt-4">₱{{ total_managed_funds|intcomma }}</p>
+        </div>
+    </div>
+
+    <div class="div4 grid-item bg-success text-white shadow">
+        <div class="card-body">
+            <h5 class="card-title text-uppercase">Transactions (Current Month)</h5>
+            <p class="card-text display-4 fw-bold mt-4">{{ current_month_transaction_count }} items</p>
+        </div>
+    </div>
+    
+    <div class="div5 grid-item bg-white shadow border">
+        <h5 class="card-header bg-light">Recent Activity</h5>
+        <div class="card-body" style="overflow-y: auto; height: 100%;">
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in recent_transactions_page %}
+                    <tr>
+                        <td>{{ transaction.transaction_date|date:"m/d/Y" }}</td>
+                        <td>{{ transaction.transaction_type|capfirst }}</td>
+                        <td>₱{{ transaction.amount|intcomma }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="3" class="text-center text-muted">No transactions found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if recent_transactions_page.has_other_pages %}
+        <nav aria-label="Transaction Page Navigation" class="p-3 border-top">
+            <ul class="pagination pagination-sm justify-content-center m-0">
+                {% if recent_transactions_page.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ recent_transactions_page.previous_page_number }}">Previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                {% endif %}
+
+                {% for i in recent_transactions_page.paginator.page_range %}
+                    {% if recent_transactions_page.number == i %}
+                        <li class="page-item active" aria-current="page"><span class="page-link">{{ i }}</span></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if recent_transactions_page.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ recent_transactions_page.next_page_number }}">Next</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Next</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+
+    <div class="div6 grid-item bg-white shadow border">
+        <h5 class="card-header bg-light">Transaction Volume</h5>
+        <div class="card-body" style="height: calc(100% - 40px);">
+            <div style="height: 100%; max-height: 100%;"> 
+                <canvas id="transactionChart"></canvas>
+            </div>
+            <p class="text-muted mt-2 small">Monthly data for visualization.</p>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    // 1. Prepare Data from Django Variables
+    // The data is passed as a comma-separated string from Django's join filter.
+    const labelsString = "{{ chart_labels|join:', ' }}";
+    const dataString = "{{ chart_data|join:', ' }}";
+    
+    // Convert strings to proper JavaScript arrays of strings/numbers
+    const chartLabels = labelsString.split(', ');
+    const chartData = dataString.split(',').map(Number); 
+
+    // 2. Initialize the Chart
+    const ctx = document.getElementById('transactionChart').getContext('2d');
+    
+    new Chart(ctx, {
+        type: 'bar', // Can be 'line', 'bar', 'pie', etc.
+        data: {
+            labels: chartLabels,
+            datasets: [{
+                label: 'Transaction Amount (₱)',
+                data: chartData,
+                backgroundColor: 'rgba(75, 192, 192, 0.6)', // Teal color
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // Allows height: 200px to take effect
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Amount (₱)'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false // Hide the legend since there's only one dataset
+                }
+            }
+        }
+    });
+</script>
+{% endblock extra_js %}

@@ -1,0 +1,835 @@
+/* ========== GENERAL STYLES ========== */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8e8c1 0%, #b3c7f7 100%);
+    font-family: Arial, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+h1, h2 {
+    margin: 0;
+    padding: 0;
+}
+
+/* ========== NAVBAR STYLES ========== */
+.nav {
+    display: flex;
+    margin-bottom: 0;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    background: rgba(111, 108, 108, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.logo-section img {
+    margin-left: 20px;
+    height: 95px;
+    width: 100px;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
+
+.nav-menu ul {
+    display: flex;
+    list-style: none;
+    margin: 2px;
+    margin-left: 20px;
+    padding: 0;
+}
+
+.nav-menu ul li {
+    margin: 0 15px;
+}
+
+.nav-menu ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 8px 18px;
+    border-radius: 8px;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.nav-menu ul li a.active,
+.nav-menu ul li a:hover {
+    color: #000;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* ========== PROFILE DROPDOWN STYLES ========== */
+.profile-menu {
+    position: relative;
+}
+
+.profile-menu .profile-icon {
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 35px;
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    min-width: 120px;
+    z-index: 10;
+}
+
+.dropdown a {
+    display: block;
+    padding: 12px 20px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.dropdown a:hover {
+    background: #f0f0f0;
+}
+
+/* ========== PAGE SECTION STYLES ========== */
+.page {
+    display: none;
+    min-height: 70vh;
+    padding: 40px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+.page.active {
+    display: block;
+    opacity: 1;
+}
+
+/* ========== ANIMATION STYLES ========== */
+@keyframes slideUpFade {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page.active .slide-up-container {
+    animation: slideUpFade 0.6s ease forwards;
+}
+
+/* ========== HOME SECTION STYLES ========== */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    color: #fff;
+    text-shadow: 1px 1px 8px #000;
+}
+
+.main-content h1 {
+    font-size: 5rem;
+    margin-bottom: 0.5rem;
+    font-weight: normal;
+}
+
+.main-content h2 {
+    font-size: 6rem;
+    font-weight: bold;
+    color: #ffe066;
+    text-shadow: 2px 2px 12px #222;
+}
+
+.main-content blockquote {
+    font-size: 2rem;
+    font-style: italic;
+    color: #f8f9fa;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 12px 24px;
+    border-radius: 8px;
+    margin-top: 1rem;
+    max-width: 400px;
+    text-align: center;
+}
+
+ /* ========== FUNDS SECTION STYLES ========== */
+        #funds-page {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7ec 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .funds-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .funds-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .funds-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4361ee;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .funds-title i {
+            color: #3f37c9;
+        }
+
+        .funds-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .funds-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .funds-btn-primary {
+            background-color: #4361ee;
+            color: white;
+        }
+
+        .funds-btn-primary:hover {
+            background-color: #3f37c9;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .funds-btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .funds-btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .offerings-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .offerings-section label {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #212529;
+        }
+
+        .offerings-input {
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 180px;
+            transition: border 0.3s;
+        }
+
+        .offerings-input:focus {
+            outline: none;
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .funds-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        #totalPercentage.error {
+            color: #e53e3e; /* Error red */
+            font-weight: bold;
+        }
+
+        #totalPercentage.valid {
+            color: #28a745; /* Success green */
+            font-weight: bold;
+        }
+
+        @media (max-width: 1100px) {
+            .funds-content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .funds-overview {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .funds-section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #212529;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .funds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .fund-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid #4361ee;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fund-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .fund-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #212529;
+        }
+
+        .fund-amount {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 5px;
+        }
+
+        .fund-change {
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .positive {
+            color: #28a745;
+        }
+
+        .negative {
+            color: #f72585;
+        }
+
+        .funds-charts {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .funds-chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 30px;
+        }
+
+        .funds-chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #212529;
+        }
+
+        .funds-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .funds-tab {
+            padding: 10px 20px;
+            background: #f1f3f9;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .funds-tab.active {
+            background: #4361ee;
+            color: white;
+        }
+
+        .funds-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .funds-modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .funds-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .funds-modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .funds-close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        .funds-form-group {
+            margin-bottom: 20px;
+        }
+
+        .funds-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .funds-form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        .funds-form-control:focus {
+            outline: none;
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .funds-modal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+
+        .funds-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .funds-stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .funds-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4361ee;
+            margin-bottom: 5px;
+        }
+
+        .funds-stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+    /* Enhanced withdrawal styles - scoped to the section */
+    #withdraw-page .withdraw-enhanced {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        max-width: 500px;
+        margin: 0 auto;
+        border: 1px solid rgba(0, 0, 0, 0.03);
+    }
+    
+    #withdraw-page .form-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 25px;
+        color: #2d3748;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+    
+    #withdraw-page .form-title i {
+        color: #4a5568;
+        background: #f7fafc;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    
+    #withdraw-page .form-group {
+        margin-bottom: 22px;
+    }
+    
+    #withdraw-page .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #2d3748;
+        font-size: 0.95rem;
+    }
+    
+    #withdraw-page .form-group label i {
+        margin-right: 8px;
+        color: #4a5568;
+        width: 16px;
+        text-align: center;
+    }
+    
+    #withdraw-page .select-wrapper {
+        position: relative;
+    }
+    
+    #withdraw-page .select-wrapper select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #fff;
+        appearance: none;
+        cursor: pointer;
+    }
+    
+    #withdraw-page .select-wrapper select:focus {
+        outline: none;
+        border-color: #4299e1;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+    }
+    
+    #withdraw-page .select-arrow {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #a0aec0;
+        pointer-events: none;
+    }
+    
+    #withdraw-page .current-balance-display {
+        background: #f0fff4;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin: 12px 0 0;
+        border: 1px solid #c6f6d5;
+    }
+    
+    #withdraw-page .current-balance-display p {
+        margin: 0;
+        font-size: 0.95rem;
+        color: #2d3748;
+    }
+    
+    #withdraw-page #selected-fund-balance {
+        color: #38a169;
+        font-size: 1.1rem;
+    }
+    
+    #withdraw-page .amount-input-wrapper {
+        position: relative;
+    }
+    
+    #withdraw-page #withdraw-amount {
+        width: 93%;
+        padding: 12px 15px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #fff;
+    }
+    
+    #withdraw-page #withdraw-amount:focus {
+        outline: none;
+        border-color: #4299e1;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+    }
+    
+    #withdraw-page .modern-textarea {
+        width: 93%;
+        padding: 12px 15px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #fff;
+        resize: none;
+        min-height: 100px;
+        font-family: inherit;
+    }
+    
+    #withdraw-page .modern-textarea:focus {
+        outline: none;
+        border-color: #4299e1;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+    }
+    
+    #withdraw-page .btn-danger {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: rgb(96, 232, 96);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    #withdraw-page .btn-danger:hover {
+        background: rgb(72, 236, 72);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+    }
+    
+    #withdraw-page .error-text {
+        color: #e53e3e;
+        font-size: 0.85rem;
+        margin-top: 6px;
+        display: block;
+    }
+/* ========== ORGANIZATIONAL CHART STYLES ========== */
+.org-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: 100%;
+}
+
+.tree-level {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    margin-bottom: 60px;
+}
+
+.tree-level::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 30px;
+    background: #007bff;
+}
+
+.tree-level:first-child::before {
+    display: none;
+}
+
+.tree-node {
+    position: relative;
+    margin: 0 20px;
+}
+
+.tree-node::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 30px;
+    background: #007bff;
+}
+
+.tree-node::after {
+    content: '';
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 2px;
+    background: #007bff;
+}
+
+.tree-node:only-child::after {
+    display: none;
+}
+
+.tree-node:first-child::after {
+    left: 50%;
+    width: 20%;
+}
+
+.tree-node:last-child::after {
+    width: 10%;
+}
+
+.box {
+    background: white;
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    padding: 15px;
+    width: 180px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.box img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 2px solid #007bff;
+}
+
+.box strong {
+    display: block;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.box .role {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+}
+
+/* ========== LEVEL-SPECIFIC STYLING ========== */
+.level-1 .box {
+    background: linear-gradient(135deg, #fff, #e3f2fd);
+    border-color: #1976d2;
+}
+
+.level-2 .box {
+    background: linear-gradient(135deg, #fff, #e8f5e9);
+    border-color: #388e3c;
+}
+
+.level-3 .box {
+    background: linear-gradient(135deg, #fff, #fff3e0);
+    border-color: #f57c00;
+}
+
+/* ========== RESPONSIVE STYLES ========== */
+@media (max-width: 768px) {
+    .tree-level {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tree-node {
+        margin: 10px 0;
+    }
+
+    .tree-node::after {
+        display: none;
+    }
+
+    .tree-node::before {
+        height: 20px;
+        top: -20px;
+    }
+}

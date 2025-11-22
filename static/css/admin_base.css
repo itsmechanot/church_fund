@@ -1,0 +1,374 @@
+/* Enhanced Admin Dashboard Styles */
+
+.parent {
+    display: grid;
+    grid-template-columns: 200px repeat(4, 1fr); 
+    grid-template-rows: 50px repeat(4, 1fr); 
+    gap: 15px;
+    grid-template-areas: 
+        "nav banner banner banner banner" 
+        "nav admin-info pending approved approved" 
+        "nav admin-info pending approved approved" 
+        "nav boxA boxA boxB boxB"
+        "nav boxA boxA boxB boxB";
+    min-height: 90vh;
+    margin: 0 auto;
+    padding: 15px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+    
+    /* Removed position: relative; as it's no longer critical */
+}
+
+/* Sidebar Navigation */
+.sidenav {
+    grid-area: nav;
+    background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
+    padding: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.sidenav h4 {
+    color: white;
+    padding: 0 15px 15px;
+    margin-bottom: 15px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    font-size: 1.1em;
+}
+
+.sidenav a {
+    color: #e8f0ff;
+    text-decoration: none;
+    display: block;
+    padding: 12px 15px;
+    margin: 5px 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidenav a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background: #4CAF50;
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.sidenav a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+    color: white;
+}
+
+.sidenav a:hover::before {
+    transform: scaleY(1);
+}
+
+/* Banner */
+.banner {
+    grid-area: banner;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    padding: 0 25px;
+    font-size: 1.3em;
+    color: white;
+    border-radius: 12px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    letter-spacing: 0.3px;
+}
+
+/* General Grid Items */
+.grid-item {
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background-color: white;
+    overflow: auto;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* Reverted position to default */
+    position: static; 
+}
+
+.grid-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.grid-item h5 {
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 1.15em;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+/* Admin Info Card */
+.admin-info {
+    grid-area: admin-info;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+    border: 1px solid #e3e8f0;
+}
+
+.admin-info h5 {
+    color: #2c3e50;
+    border-bottom-color: #667eea;
+}
+
+.admin-info p {
+    margin-bottom: 10px;
+    color: #546e7a;
+    font-size: 0.95em;
+}
+
+.admin-info strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.admin-info .btn {
+    margin-top: 15px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.admin-info .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Pending Users */
+.pending-users {
+    grid-area: pending;
+    background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+    border: 2px solid #ffd54f;
+}
+
+.pending-users h5 {
+    color: #f57c00;
+    border-bottom-color: #ffd54f;
+}
+
+.pending-users .list-group-item {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #ffe082;
+    padding: 12px 0;
+}
+
+.pending-users .list-group-item:last-child {
+    border-bottom: none;
+}
+
+.pending-users .btn-success {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    border: none;
+    padding: 6px 16px;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.pending-users .btn-success:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+/* Approved Users - Active List */
+.approved-users {
+    grid-area: approved;
+    background: linear-gradient(135deg, #e8f5e9 0%, #f1f8f4 100%);
+    border: 2px solid #81c784;
+}
+
+.approved-users h5 {
+    color: #2e7d32;
+    border-bottom-color: #81c784;
+}
+
+.approved-users .table thead th {
+    background-color: rgba(129, 199, 132, 0.2);
+    color: #2e7d32;
+    font-weight: 600;
+    border: none;
+    padding: 12px 8px;
+}
+
+.approved-users .table tbody tr:hover {
+    background-color: rgba(129, 199, 132, 0.1);
+}
+
+.approved-users .btn-info {
+    background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+    border: none;
+    padding: 4px 12px;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.approved-users .btn-info:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3);
+}
+
+/* Disable Button Style */
+.approved-users .btn-danger {
+    background: linear-gradient(135deg, #e74a3b 0%, #cc3e32 100%);
+    border: none;
+    padding: 4px 12px;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+.approved-users .btn-danger:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(231, 74, 59, 0.3);
+}
+
+
+/* Box A - Transaction History */
+.box-a {
+    grid-area: boxA;
+    background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
+    border: 1px solid #e3f2fd;
+}
+
+.box-a h5 {
+    color: #1565c0;
+    border-bottom-color: #64b5f6;
+}
+
+.box-a .table {
+    font-size: 0.9em;
+    margin-bottom: 0;
+}
+
+.box-a .table thead th {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    color: #1565c0;
+    font-weight: 600;
+    border: none;
+    padding: 12px 8px;
+}
+
+.box-a .table tbody tr:hover {
+    background-color: #f5f9ff;
+}
+
+.box-a .table tbody td {
+    padding: 10px 8px;
+    vertical-align: middle;
+}
+
+/* Box B - Disabled Users (NEW LOCATION) */
+.box-b {
+    grid-area: boxB;
+    background: linear-gradient(135deg, #fef5f5 0%, #fffafa 100%);
+    border: 2px solid #e74c3c; /* Red border for disabled accounts */
+}
+
+.box-b h5 {
+    color: #c0392b; /* Dark red title */
+    border-bottom-color: #e74c3c;
+}
+
+.box-b .table {
+    font-size: 0.9em;
+    margin-bottom: 0;
+}
+
+.box-b .table thead th {
+    background-color: rgba(231, 76, 60, 0.2); /* Light red header background */
+    color: #c0392b;
+    font-weight: 600;
+    border: none;
+    padding: 12px 8px;
+}
+
+.box-b .table tbody tr:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+/* Enable Button Style (Used in Box B) */
+.box-b .btn-success {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    border: none;
+    padding: 4px 12px;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+.box-b .btn-success:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+
+/* Utility Classes */
+.text-success {
+    color: #2e7d32 !important;
+    font-weight: 500;
+}
+
+.text-warning {
+    color: #f57c00 !important;
+    font-weight: 600;
+}
+
+.text-danger {
+    color: #c0392b !important;
+    font-weight: 600;
+}
+
+.text-muted {
+    color: #78909c !important;
+}
+
+/* Scrollbar Styling */
+.grid-item::-webkit-scrollbar {
+    width: 6px;
+}
+
+.grid-item::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.grid-item::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 10px;
+}
+
+.grid-item::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .parent {
+        grid-template-columns: 180px repeat(4, 1fr);
+    }
+    
+    .sidenav {
+        padding: 15px 0;
+    }
+    
+    .sidenav a {
+        padding: 10px 12px;
+        font-size: 0.9em;
+    }
+}
+
+

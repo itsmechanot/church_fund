@@ -1,0 +1,289 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History - Parish Core</title>
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/transaction.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://kit.fontawesome.com/YOUR_FONT_AWESOME_KIT.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <a class="back-button" href="{% url 'index' %}#funds-page">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" 
+                  stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back
+    </a>
+
+    <div class="transaction-container">
+        <div class="page-header">
+            <h1>
+                <i class="fas fa-history"></i>
+                Transaction History
+            </h1>
+            <div class="total-balance-badge">
+                <span class="balance-label">Total Balance</span>
+                <span class="balance-amount">₱{{ total_balance|floatformat:2|intcomma }}</span>
+            </div>
+        </div>
+
+        <div class="controls-section">
+            <form method="GET" class="filter-form" id="transactionFilterForm">
+                
+                <div class="filter-group">
+                    <label for="fundFilter">
+                        <i class="fas fa-piggy-bank"></i> Filter by Fund
+                    </label>
+                    <select name="fund" id="fundFilter" onchange="this.form.submit()">
+                        <option value="">All Funds</option>
+                        {% for fund in funds %}
+                            <option value="{{ fund.pk }}" {% if fund.pk|slugify == current_fund|slugify %}selected{% endif %}>
+                                {{ fund.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="typeFilter">
+                        <i class="fas fa-filter"></i> Filter by Type
+                    </label>
+                    <select name="type" id="typeFilter" onchange="this.form.submit()">
+                        <option value="">All Types</option>
+                        <option value="OFFERING" {% if current_type == 'OFFERING' %}selected{% endif %}>
+                            Offering
+                        </option>
+                        <option value="WITHDRAWAL" {% if current_type == 'WITHDRAWAL' %}selected{% endif %}>
+                            Withdrawal
+                        </option>
+                    </select>
+                </div>
+
+                <div class="search-group">
+                    <label for="searchInput">
+                        <i class="fas fa-search"></i> Search
+                    </label>
+                    <input type="text" 
+                            name="q" 
+                            id="searchInput" 
+                            placeholder="Search description, fund, or recorded by..." 
+                            value="{{ current_q|default:'' }}">
+                </div>
+                
+                <button type="submit" class="apply-btn">
+                    <i class="fas fa-search"></i>
+                    Apply Filters
+                </button>
+                
+                {% if current_type or current_fund or current_q %}
+                    <div class="clear-filters-container">
+                        <a href="." class="clear-btn">
+                            <i class="fas fa-sync-alt"></i> Clear Filters
+                        </a>
+                    </div>
+                {% endif %}
+            </form>
+        </div>
+
+        <div class="table-wrapper">
+            {% if transactions %} 
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Fund</th>
+                            <th>Recorded By</th>
+                            <th>Description</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                            <tr class="transaction-row" data-transaction-id="{{ transaction.id }}">
+                                <td data-label="Date">
+                                    <i class="far fa-calendar"></i>
+                                    {{ transaction.transaction_date|date:"M d, Y" }}
+                                </td>
+                                <td data-label="Type">
+                                    <span class="badge badge-{{ transaction.transaction_type|lower }}">
+                                        {% if transaction.transaction_type == 'OFFERING' %}<i class="fas fa-plus-circle"></i>{% else %}<i class="fas fa-minus-circle"></i>{% endif %}
+                                        {{ transaction.transaction_type|title }}
+                                    </span>
+                                </td>
+                                <td data-label="Amount">
+                                    <span class="amount-value amount-{{ transaction.transaction_type|lower }}">
+                                        {% if transaction.transaction_type == 'OFFERING' %}+{% else %}-{% endif %}
+                                        ₱{{ transaction.amount|floatformat:2|intcomma }}
+                                    </span>
+                                </td>
+                                <td data-label="Fund">
+                                    {% if transaction.splits.exists %}
+                                        <span class="split-info" 
+                                              title="Distributed into: {% for split in transaction.splits.all %}{{ split.fund.name }}: ₱{{ split.amount_allocated|floatformat:2|intcomma }}{% if not forloop.last %} | {% endif %}{% endfor %}">
+                                            <i class="fas fa-code-branch"></i> {{ transaction.splits.count }} Funds
+                                        </span>
+                                    {% else %}
+                                        {{ transaction.fund.name|default:"N/A" }}
+                                    {% endif %}
+                                </td>
+                                <td data-label="Recorded By">
+                                    <i class="fas fa-user"></i>
+                                    {{ transaction.created_by.get_full_name|default:"System" }}
+                                </td>
+                                <td data-label="Description">
+                                    {{ transaction.description|truncatechars:70 }}
+                                </td>
+                                
+                                <td data-label="Actions" class="actions-cell">
+                                    
+                                    <button type="button" class="details-toggle-btn" 
+                                            data-target="#details-{{ transaction.id }}" title="View Details">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    
+                                    <form method="POST" 
+                                          action="{% url 'delete_transaction' transaction.id %}" 
+                                          onsubmit="return confirm('Are you sure you want to delete this transaction? This action cannot be undone.');">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button type="submit" class="delete-btn" title="Delete Transaction">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+
+                            <tr class="details-row hidden" id="details-{{ transaction.id }}">
+                                <td colspan="7">
+                                    <div class="details-content">
+                                        
+                                        {% if transaction.splits.exists %}
+                                        <div class="details-section split-section">
+                                            <h4><i class="fas fa-bezier-curve"></i> Split Allocation Details</h4>
+                                            <ul class="split-list">
+                                                {% for split in transaction.splits.all %}
+                                                <li>
+                                                    <span class="split-fund">{{ split.fund.name }}</span>
+                                                    <span class="split-amount">
+                                                        ₱{{ split.amount_allocated|floatformat:2|intcomma }} 
+                                                        ({{ split.percentage|floatformat:0 }}%) 
+                                                    </span>
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        {% endif %}
+                                        
+                                        <div class="details-section audit-section">
+                                            <h4><i class="fas fa-history"></i> Audit Details</h4>
+                                            <p><strong>Transaction Date:</strong> {{ transaction.transaction_date|date:"F d, Y" }}</p>
+                                            {% comment %} Assuming you fixed the view and added 'created_at' or using 'id' for sort {% endcomment %}
+                                            <p><strong>Recorded On:</strong> {{ transaction.created_at|date:"F d, Y" }} at {{ transaction.created_at|time:"h:i A" }}</p>
+                                            <p><strong>Recorded By:</strong> {{ transaction.created_by.get_full_name|default:"System" }}</p>
+                                            {% if transaction.description %}
+                                                <p><strong>Full Description:</strong> {{ transaction.description }}</p>
+                                            {% endif %}
+                                        </div>
+                                        
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="no-transactions">
+                    <i class="fas fa-inbox"></i>
+                    <h3>No Transactions Found</h3>
+                    <p>No transactions match the selected criteria.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if page_obj.has_other_pages %}
+            {% with filter_params="&type="|add:current_type|default:""|add:"&fund="|add:current_fund|default:""|add:"&q="|add:current_q|default:"" %}
+                <div class="pagination-controls">
+                    <p class="pagination-info">
+                        <i class="fas fa-info-circle"></i>
+                        Showing **{{ page_obj.start_index }}** to **{{ page_obj.end_index }}** of **{{ page_obj.paginator.count }}** transactions.
+                    </p>
+                    <div class="pagination-buttons">
+                        
+                        {% if page_obj.has_previous %}
+                            <a href="?page={{ page_obj.previous_page_number }}{{ filter_params }}">
+                                <button><i class="fas fa-chevron-left"></i> Previous</button>
+                            </a>
+                        {% else %}
+                            <button disabled><i class="fas fa-chevron-left"></i> Previous</button>
+                        {% endif %}
+                        
+                        <span class="current-page-number">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                        </span>
+
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}{{ filter_params }}">
+                                <button>Next <i class="fas fa-chevron-right"></i></button>
+                            </a>
+                        {% else %}
+                            <button disabled>Next <i class="fas fa-chevron-right"></i></button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endwith %}
+        {% endif %}
+    </div>
+
+    <script>
+        // Debounced Search Script
+        let timeout = null;
+        const searchInput = document.getElementById('searchInput');
+        const form = document.getElementById('transactionFilterForm');
+        
+        searchInput.addEventListener('keyup', function(e) {
+            clearTimeout(timeout);
+            
+            if (e.key === 'Enter') {
+                form.submit();
+                return;
+            }
+            
+            timeout = setTimeout(() => {
+                if (document.activeElement === searchInput) {
+                    form.submit();
+                }
+            }, 800);
+        });
+
+        // NEW: Transaction Details Toggle Script
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButtons = document.querySelectorAll('.details-toggle-btn');
+            
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const targetRow = document.querySelector(targetId);
+                    const parentRow = this.closest('.transaction-row');
+                    
+                    if (targetRow.classList.contains('hidden')) {
+                        // Show details
+                        targetRow.classList.remove('hidden');
+                        parentRow.classList.add('active');
+                    } else {
+                        // Hide details
+                        targetRow.classList.add('hidden');
+                        parentRow.classList.remove('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

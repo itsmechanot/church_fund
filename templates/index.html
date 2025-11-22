@@ -1,0 +1,489 @@
+{% load static %} 
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parish Core</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="nav">
+        <div class="logo-section">
+            <img src="{% static 'img/Church_fund_logo.png' %}" alt="Logo">
+        </div>
+        <div class="nav-right">
+            <div class="nav-menu">
+                <ul>
+                    <li><a href="#home" class="link active">HOME</a></li>
+                    <li><a href="#funds-page" class="link">FUNDS</a></li>
+                    <li><a href="#withdraw-page" class="link">WITHDRAW</a></li>
+                    <li><a href="#about-page" class="link">ABOUT</a></li>
+                </ul>
+            </div>
+            <div class="profile-menu">
+                <i class="fas fa-user profile-icon" id="profileIcon"></i>
+                <div class="dropdown" id="profileDropdown">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'profile' %}">{{ user.username }}</a>
+                        <a href="{% url 'logout' %}">Logout</a>
+                    {% else %}
+                        <a href="{% url 'login' %}">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HOME -->
+    <section id="home" class="page active">
+        <div class="main-content slide-up-container">
+            <h1>Welcome to</h1>
+            <h2>Parish Core</h2>
+            <blockquote>Faith in every detail</blockquote>
+        </div>
+    </section>
+
+    <!-- ========== FUNDS SECTION ========== -->
+    <section class="page" id="funds-page">
+        <div class="funds-container">
+            <!-- Header Section -->
+            <div class="funds-header">
+                <h2 class="funds-title">
+                    <i class="fas fa-chart-pie"></i> Church Funds
+                </h2>
+                {% if user.is_authenticated %}
+                <div class="funds-controls">
+                    <button class="funds-btn funds-btn-primary" id="split-offerings-btn">
+                        <i class="fas fa-calculator"></i> Edit Percentage
+                    </button>
+                    <button class="funds-btn funds-btn-secondary" id="edit-funds-btn">
+                        <i class="fas fa-plus"></i> Specific Fund
+                    </button>
+                    <button class="funds-btn funds-btn-secondary" id="add-fund-btn">
+                        <i class="fas fa-plus"></i> Create New Fund
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Offerings Input Section -->
+             {% if user.is_authenticated %}
+            <div class="offerings-section">
+                <form id="quickSplitForm" method="POST" action="{% url 'quick_split_transaction' %}">
+                    {% csrf_token %}
+                    <label for="offerings-input">Enter Offerings Collected:</label>
+                    <input 
+                        type="number" 
+                        id="offerings-input" 
+                        name="total_offering_amount" 
+                        class="offerings-input" 
+                        min="0" 
+                        step="0.01" 
+                        placeholder="0.00"
+                        required
+                    >
+                    
+                    <input type="hidden" name="transaction_type" value="Income">
+
+                    <button class="funds-btn funds-btn-primary" id="quick-split-btn" type="submit">
+                        <i class="fas fa-bolt"></i> Quick Split
+                    </button>
+                </form>
+                </div>
+            {% endif %}
+
+            <!-- Main Content Grid -->
+            <div class="funds-content-grid">
+                <!-- Funds Overview -->
+                <div class="funds-overview">
+                    <h3 class="funds-section-title">
+                        <i class="fas fa-wallet"></i> Fund Overview
+                    </h3>
+                    
+                    <div class="funds-grid">
+                        {% for fund in funds %}
+                        <div class="fund-card {{ fund.fund_type }}">
+                            <h3>{{ fund.name }}</h3>
+                            
+                            <p class="fund-amount">₱<span>{{ fund.current_balance|floatformat:2|intcomma }}</span></p>
+                            
+                            <p class="fund-percentage">
+                                Split Allocation: <strong>{{ fund.default_percentage|floatformat }}%</strong>
+                            </p>
+                            
+                        </div>
+                        {% empty %}
+                        <p>No funds have been created yet. Use the "Create New Fund" button to begin.</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="funds-stats-grid">
+                        <div class="funds-stat-card">
+                            <div class="funds-stat-value">₱{{ total_balance|floatformat:2|intcomma }}</div>
+                            <div class="funds-stat-label">Total Funds</div>
+                        </div>
+                        
+                        <div class="funds-stat-card">
+                            <div class="funds-stat-value {% if this_month_growth >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                ₱{{ this_month_growth|floatformat:2|intcomma }}
+                            </div>
+                            <div class="funds-stat-label">This Month's Net Growth</div>
+                        </div>
+                        
+                        <div class="funds-stat-card">
+                            <div class="funds-stat-value {% if avg_monthly_growth >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                ₱{{ avg_monthly_growth|floatformat:2|intcomma }}
+                            </div>
+                            <div class="funds-stat-label">Avg. Monthly Growth (12 Mo.)</div>
+                        </div>
+                    </div>
+
+                    <div class="funds-stats-grid">
+                        </div>
+    
+                    <div class="recent-transactions-card">
+                        <div class="stat-info">
+                            <h3 class="funds-section-title"><i class="fas fa-history"></i> Recent Transactions</h3>
+        
+                            {% if recent_transactions %}
+                            <ul class="recent-list">
+                                {% for transaction in recent_transactions|slice:":4" %} 
+                                <li class="list-item transaction-{{ transaction.transaction_type|lower }}">
+                                    
+                                    <span class="list-type">{{ transaction.transaction_type|title|slice:":8" }}</span>
+                                    
+                                    <span class="list-amount">
+                                        {% if transaction.transaction_type == 'OFFERING' %}+{% else %}-{% endif %}
+                                        ₱{{ transaction.amount|floatformat:0|intcomma }}
+                                    </span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            
+                            <a href="{% url 'transactions_list' %}" class="view-all-link transactions-link">
+                                View Full History <i class="fas fa-chevron-right"></i>
+                            </a>
+                            
+                            {% else %}
+                            <p class="no-data-message">No recent transactions.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="funds-charts">
+                    <h3 class="funds-section-title">
+                        <i class="fas fa-chart-line"></i> Fund Performance
+                    </h3>
+                    
+                    <div class="funds-selector">
+                        <div class="funds-tab active" data-fund="all">All Funds</div>
+                        
+                        {% for fund in funds %}
+                        <div class="funds-tab" data-fund="{{ fund.name|slugify }}">
+                            {{ fund.name }}
+                        </div>
+                        {% endfor %}
+                        </div>
+
+                    <div class="funds-chart-container">
+                        <canvas id="monthlyTrendChart"></canvas>
+                    </div>
+
+                    <div class="funds-chart-container">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Funds Modal -->
+        <div class="funds-modal" id="editFundsModal">
+            <div class="funds-modal-content">
+                <div class="funds-modal-header">
+                    <h3 class="funds-modal-title">Add Amount to Specific Funds</h3>
+                    <button class="funds-close-modal">&times;</button>
+                </div>
+
+                <form id="editFundsForm" action="{% url 'specific_multi_transaction' %}" method="POST">
+                    {% csrf_token %}
+
+                    {% for fund in funds %}
+                    <div class="funds-form-group">
+                        <label for="edit-{{ fund.fund_type }}">{{ fund.name }} (₱ {{ fund.current_balance|floatformat:2|intcomma }} )</label>
+                        <input 
+                            type="number" 
+                            id="edit-{{ fund.fund_type }}" 
+                            
+                            name="fund_{{ fund.pk }}_amount" 
+                            
+                            class="funds-form-control" 
+                            min="0" 
+                            step="0.01" 
+                            placeholder="0.00" 
+                        >
+                    </div>
+                    {% empty %}
+                    <p>No funds available to edit. Please create a new fund first.</p>
+                    {% endfor %}
+                    <div class="funds-modal-actions">
+                        <button type="button" class="funds-btn funds-btn-cancel funds-close-modal">Cancel</button>
+                        <button type="submit" class="funds-btn funds-btn-primary">Deposit Amounts</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add Fund Modal -->
+        <div class="funds-modal" id="addFundModal">
+            <div class="funds-modal-content">
+                <div class="funds-modal-header">
+                    <h3 class="funds-modal-title">Add New Fund</h3>
+                    <button type="button" class="funds-close-modal">&times;</button>
+                </div>
+                <form id="addFundForm">
+                    {% csrf_token %} <div class="funds-form-group">
+                        <label for="new-fund-name">Fund Name</label>
+                        <input type="text" id="new-fund-name" name="new-fund-name" class="funds-form-control" required>
+                    </div>
+                    <div class="funds-form-group">
+                        <label for="new-fund-amount">Amount (Initial Balance)</label>
+                        <input type="number" id="new-fund-amount" name="new-fund-amount" class="funds-form-control" min="0" step="0.01" required>
+                    </div>
+                    <div class="funds-form-group">
+                        <label for="new-fund-desc">Description</label>
+                        <input type="text" id="new-fund-desc" name="new-fund-desc" class="funds-form-control" required>
+                    </div>
+                    
+                    <div class="funds-modal-actions">
+                        <button type="button" class="funds-btn funds-btn-cancel funds-close-modal">Cancel</button>
+                        
+                        <button type="submit" class="funds-btn funds-btn-primary">Add Fund</button>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+
+        <!-- Split Percentage Modal -->
+        <div class="funds-modal" id="splitOfferingsModal">
+            <div class="funds-modal-content">
+                <div class="funds-modal-header">
+                    <h3 class="funds-modal-title">Set Default Offering Split</h3>
+                    <button class="funds-close-modal">&times;</button>
+                </div>
+                
+                <form id="splitPercentageForm">
+                    {% csrf_token %}
+                    
+                    <p class="modal-description">Assign a percentage for each fund. The total must equal 100%.</p>
+
+                    <div id="percentage-inputs">
+                        {% for fund in funds %}
+                        <div class="funds-form-group split-fund-group">
+                            <label for="split-{{ fund.pk }}">{{ fund.name }} (%)</label>
+                            <input 
+                                type="number" 
+                                id="split-{{ fund.pk }}" 
+                                name="split-{{ fund.pk }}" 
+                                class="funds-form-control percentage-input" 
+                                min="0" 
+                                max="100" 
+                                step="0.01" 
+                                placeholder="0.00"
+                                
+                                {# FIX APPLIED HERE: Use |floatformat for dynamic precision #}
+                                value="{{ fund.default_percentage|floatformat|default:'0' }}" 
+                                
+                                required
+                            >
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="funds-stat-card total-percentage-display">
+                        <div class="funds-stat-value" id="totalPercentage">0.00%</div>
+                        <div class="funds-stat-label">Total Assigned Percentage</div>
+                    </div>
+
+                    <div class="funds-modal-actions">
+                        <button type="button" class="funds-btn funds-btn-cancel funds-close-modal">Cancel</button>
+                        <button type="submit" class="funds-btn funds-btn-primary" id="saveSplitBtn">Save Split</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- WITHDRAW -->
+<section class="page modern-slide-in" id="withdraw-page">
+    <div class="slide-up-container">
+        
+        <div class="modal-card withdraw-enhanced">
+            <h2 class="form-title">
+                <i class="fas fa-hand-holding-usd"></i> Withdrawal Request
+            </h2>
+            
+            <form class="withdraw-form" id="modern-withdraw-form">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="fund-select">Select Fund:</label>
+                    <div class="select-wrapper">
+                        <select id="fund-select" name="fund" required>
+                            <option value="" disabled selected hidden>Select a fund</option>
+                            {% for fund in funds %}
+                            <option 
+                                value="{{ fund.pk }}" 
+                                data-balance="{{ fund.current_balance|floatformat:2 }}"
+                            >
+                                {{ fund.name }} (Current: ₱{{ fund.current_balance|floatformat:2|intcomma }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+
+                    <div class="current-balance-display">
+                        <p>Available Balance: <strong id="selected-fund-balance">₱0.00</strong></p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="withdraw-amount"><i class="fas fa-dollar-sign"></i> Amount to Withdraw</label>
+                    <div class="amount-input-wrapper">
+                        <input 
+                            type="number" 
+                            id="withdraw-amount" 
+                            name="amount" 
+                            class="modern-input" 
+                            placeholder="e.g., 5,000.00" 
+                            min="0" 
+                            step="0.01" 
+                            required
+                        >
+                    </div>
+                    <small class="error-text" id="amount-error"></small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="withdraw-reason"><i class="fas fa-file-alt"></i> Reason for Withdrawal</label>
+                    <textarea 
+                        id="withdraw-reason" 
+                        name="description" 
+                        class="modern-textarea" 
+                        placeholder="Provide a clear description for audit trail (e.g., Purchase of new microphone for worship)." 
+                        required
+                    ></textarea>
+                </div>
+                
+                <input type="hidden" name="transaction_type" value="Expense">
+                
+                <button type="submit" class="modern-btn btn-danger withdraw-btn">
+                     Complete Withdrawal
+                </button>
+            </form>
+        </div>
+        
+    </div>
+</section>
+
+    <!-- ABOUT -->
+    <section class="page" id="about-page">
+        <div class="slide-up-container">
+            <h2>Organizational Chart</h2>
+            <div class="org-chart">
+                <div class="tree">
+                    <!-- Level 1: Pastor -->
+                    <div class="tree-level level-1">
+                        <div class="tree-node">
+                            <div class="box">
+                                <img src="pastor.jpg" alt="Pastor">
+                                <strong>Rev. John Smith</strong>
+                                <div class="role">Senior Pastor</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Level 2: Secretary & Treasurer -->
+                    <div class="tree-level level-2">
+                        <div class="tree-node">
+                            <div class="box">
+                                <img src="secretary.jpg" alt="Secretary">
+                                <strong>Mary Johnson</strong>
+                                <div class="role">Church Secretary</div>
+                            </div>
+                        </div>
+                        <div class="tree-node">
+                            <div class="box">
+                                <img src="treasurer.jpg" alt="Treasurer">
+                                <strong>Robert Davis</strong>
+                                <div class="role">Church Treasurer</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Level 3: Churches -->
+                    <div class="tree-level level-3">
+                        <div class="tree-node">
+                            <div class="box">
+                                <img src="church1.jpg" alt="Church 1">
+                                <strong>St. Mary's Parish</strong>
+                                <div class="role">Downtown Branch</div>
+                            </div>
+                        </div>
+                        <div class="tree-node">
+                            <div class="box">
+                                <img src="church2.jpg" alt="Church 2">
+                                <strong>St. Peter's Chapel</strong>
+                                <div class="role">Eastside Branch</div>
+                            </div>
+                        </div>
+                        <div class="tree-node">
+                            <div class="box">
+                                <img src="church3.jpg" alt="Church 3">
+                                <strong>St. Luke's Church</strong>
+                                <div class="role">Westside Branch</div>
+                            </div>
+                        </div>
+                        <div class="tree-node">
+                            <div class="box">
+                                <img src="church4.jpg" alt="Church 4">
+                                <strong>St. Mark's Parish</strong>
+                                <div class="role">Northside Branch</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        const DYNAMIC_FUNDS_DATA = [
+            {% for fund in funds %}
+            {
+                name: "{{ fund.name|safe }}",
+                type: "{{ fund.fund_type|lower }}",
+                balance: parseFloat("{{ fund.current_balance|floatformat:2 }}"),
+                id: "{{ fund.id }}", 
+                default_percentage: parseFloat("{{ fund.default_percentage|floatformat:2|default:'0' }}") // <-- CHANGED PROPERTY NAME
+            },
+            {% endfor %}
+        ];
+        
+        const DYNAMIC_TOTAL_BALANCE = parseFloat("{{ total_balance|floatformat:2 }}");
+        const DYNAMIC_FUND_LABELS = JSON.parse('{{ fund_labels|safe }}'.replace(/'/g, '"'));
+        const DYNAMIC_FUND_BALANCES = JSON.parse('{{ fund_balances }}');
+
+    </script>
+    <script src="{% static 'javascript/index.js' %}"></script>
+</body>
+</html>
