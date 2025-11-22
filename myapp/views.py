@@ -727,6 +727,10 @@ def save_default_split(request):
 @require_http_methods(["POST"])
 @transaction.atomic
 def create_admin_view(request):
+    # Check if admin already exists
+    if Treasurer.objects.filter(is_superuser=True).exists():
+        return render(request, 'create_admin.html', {'error': 'Admin already exists. Please login instead.'})
+    
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
