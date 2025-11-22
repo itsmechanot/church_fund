@@ -746,6 +746,29 @@ def debug_admin_view(request):
     }
     return render(request, 'simple_debug.html', context)
 
+def simple_create_admin(request):
+    if request.method == 'POST':
+        try:
+            if not Treasurer.objects.filter(username='admin').exists():
+                admin = Treasurer.objects.create(
+                    username='admin',
+                    email='admin@test.com',
+                    first_name='Admin',
+                    last_name='User',
+                    is_staff=True,
+                    is_superuser=True,
+                    is_approved=True,
+                    is_active=True
+                )
+                admin.set_password('admin123')
+                admin.save()
+                return render(request, 'create_admin_simple.html', {'message': 'Admin created! Username: admin, Password: admin123'})
+            else:
+                return render(request, 'create_admin_simple.html', {'message': 'Admin already exists!'})
+        except Exception as e:
+            return render(request, 'create_admin_simple.html', {'message': f'Error: {e}'})
+    return render(request, 'create_admin_simple.html')
+
 def create_admin_view(request):
     # Check if admin already exists
     if Treasurer.objects.filter(is_superuser=True).exists():

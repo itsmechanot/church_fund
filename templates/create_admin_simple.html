@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><title>Create Admin</title></head>
+<body>
+<h1>Create Admin Account</h1>
+<form method="post">
+{% csrf_token %}
+<button type="submit">Create Admin Now</button>
+</form>
+{% if message %}
+<p>{{ message }}</p>
+{% endif %}
+</body>
+</html>
