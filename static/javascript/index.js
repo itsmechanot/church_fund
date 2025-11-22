@@ -44,7 +44,7 @@ function setFundBalance(fundType, newAmount) {
 
 const navLinks = document.querySelectorAll('.nav-menu a');
 const pages = document.querySelectorAll('.page');
-const defaultPageId = 'home-page'; // Set your intended default page ID
+const defaultPageId = 'home'; // Set your intended default page ID
 
 // Reusable function to activate a page based on its ID (now outside the loop)
 function activatePage(targetId) {

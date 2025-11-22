@@ -30,4 +30,5 @@ urlpatterns = [
     path('create-admin/', views.create_admin_view, name='create_admin'),
     path('debug-admin/', views.debug_admin_view, name='debug_admin'),
     path('simple-create-admin/', views.simple_create_admin, name='simple_create_admin'),
+    path('fund-debug/', views.fund_debug_view, name='fund_debug'),
 ]

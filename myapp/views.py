@@ -746,6 +746,33 @@ def debug_admin_view(request):
     }
     return render(request, 'simple_debug.html', context)
 
+def fund_debug_view(request):
+    if request.method == 'POST' and 'create_general' in request.POST:
+        try:
+            if not Fund.objects.filter(name='General Fund').exists():
+                Fund.objects.create(
+                    name='General Fund',
+                    description='Main church fund for general expenses',
+                    current_balance=Decimal('0.00'),
+                    default_percentage=50.0,
+                    created_by=request.user if request.user.is_authenticated else None
+                )
+                message = 'General Fund created successfully!'
+            else:
+                message = 'General Fund already exists!'
+        except Exception as e:
+            message = f'Error: {e}'
+    else:
+        message = None
+    
+    funds = Fund.objects.all()
+    context = {
+        'funds': funds,
+        'total_funds': funds.count(),
+        'message': message
+    }
+    return render(request, 'fund_debug.html', context)
+
 def simple_create_admin(request):
     if request.method == 'POST':
         try:
