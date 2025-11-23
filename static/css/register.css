@@ -249,13 +249,129 @@ body {
     margin-bottom: 20px;
 }
 
+/* Tablet Styles */
+@media (max-width: 1024px) {
+    .signup-container {
+        max-width: 550px;
+        padding: 45px 40px;
+    }
+    
+    .logo h1 {
+        font-size: 2.4rem;
+    }
+    
+    .form-group {
+        margin-bottom: 25px;
+    }
+    
+    .input-wrapper input {
+        padding: 16px 18px;
+        font-size: 1.1rem;
+    }
+    
+    .submit-btn {
+        padding: 16px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
+    .signup-container {
+        max-width: 100%;
+        padding: 35px 30px;
+        margin: 20px 0;
+    }
+    
+    .logo h1 {
+        font-size: 2rem;
+    }
+    
+    .logo p {
+        font-size: 1rem;
+    }
+    
+    .form-group {
+        margin-bottom: 22px;
+    }
+    
+    .form-group label {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+    
+    .input-wrapper input {
+        padding: 15px 16px;
+        font-size: 1.05rem;
+    }
+    
+    .submit-btn {
+        padding: 16px;
+        font-size: 1.1rem;
+    }
+    
+    .back-button {
+        top: 20px;
+        left: 20px;
+        padding: 12px 20px;
+        font-size: 1.05rem;
+    }
+}
+
+/* Small Mobile Styles */
 @media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
     .signup-container {
         padding: 30px 25px;
+        margin: 10px 0;
     }
-
+    
+    .logo h1 {
+        font-size: 1.8rem;
+    }
+    
+    .logo p {
+        font-size: 0.95rem;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        font-size: 0.95rem;
+    }
+    
+    .input-wrapper input {
+        padding: 14px 16px;
+        font-size: 1rem;
+    }
+    
+    .submit-btn {
+        padding: 15px;
+        font-size: 1.05rem;
+    }
+    
     .back-button {
         top: 15px;
         left: 15px;
+        padding: 10px 16px;
+        font-size: 1rem;
+    }
+    
+    .login-section p {
+        font-size: 0.9rem;
+    }
+    
+    .login-button {
+        padding: 12px 20px;
+        font-size: 0.95rem;
     }
 }
