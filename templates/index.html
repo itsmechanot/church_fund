@@ -203,17 +203,13 @@
                                         </span>
                                     </div>
                                     
-                                    {% if user.is_authenticated and transaction.status == 'ACTIVE' %}
+                                    {% if user.is_authenticated %}
                                     <form method="POST" action="{% url 'undo_transaction' transaction.id %}" class="undo-form" onsubmit="return confirm('Are you sure you want to undo this transaction?')">
                                         {% csrf_token %}
                                         <button type="submit" class="undo-btn" title="Undo Transaction">
                                             <i class="fas fa-undo"></i>
                                         </button>
                                     </form>
-                                    {% elif transaction.status == 'REVERTED' %}
-                                    <span class="reverted-label" title="This transaction has been reverted">
-                                        <i class="fas fa-ban"></i>
-                                    </span>
                                     {% endif %}
                                 </li>
                                 {% endfor %}
