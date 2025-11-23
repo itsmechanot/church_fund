@@ -40,7 +40,9 @@
                 <ul>
                     <li><a href="#home" class="link active">HOME</a></li>
                     <li><a href="#funds-page" class="link">FUNDS</a></li>
+                    {% if user.is_authenticated %}
                     <li><a href="#withdraw-page" class="link">WITHDRAW</a></li>
+                    {% endif %}
                     <li><a href="#about-page" class="link">ABOUT</a></li>
                 </ul>
             </div>
@@ -383,6 +385,7 @@
     </section>
 
     <!-- WITHDRAW -->
+    {% if user.is_authenticated %}
 <section class="page modern-slide-in" id="withdraw-page">
     <div class="slide-up-container">
         
@@ -454,6 +457,7 @@
         
     </div>
 </section>
+    {% endif %}
 
     <!-- ABOUT -->
     <section class="page" id="about-page">
