@@ -625,6 +625,14 @@ function closeAboutModal(type) {
     const modal = document.getElementById(type + 'Modal');
     if (modal) {
         modal.style.display = 'none';
+        // Stop video if it's the video modal
+        if (type === 'video') {
+            const video = modal.querySelector('.modal-video');
+            if (video) {
+                video.pause();
+                video.currentTime = 0;
+            }
+        }
     }
 }
 
@@ -635,6 +643,14 @@ document.addEventListener('click', function(event) {
         const modal = document.getElementById(modalId);
         if (modal && event.target === modal) {
             modal.style.display = 'none';
+            // Stop video if it's the video modal
+            if (modalId === 'videoModal') {
+                const video = modal.querySelector('.modal-video');
+                if (video) {
+                    video.pause();
+                    video.currentTime = 0;
+                }
+            }
         }
     });
 });
