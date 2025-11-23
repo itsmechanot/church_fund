@@ -613,6 +613,32 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// --- ABOUT MODAL FUNCTIONALITY ---
+function openAboutModal(type) {
+    const modal = document.getElementById(type + 'Modal');
+    if (modal) {
+        modal.style.display = 'block';
+    }
+}
+
+function closeAboutModal(type) {
+    const modal = document.getElementById(type + 'Modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Close modal when clicking outside of it
+document.addEventListener('click', function(event) {
+    const modals = ['logoModal', 'posterModal', 'videoModal'];
+    modals.forEach(modalId => {
+        const modal = document.getElementById(modalId);
+        if (modal && event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+});
+
 // --- HASH-BASED NAVIGATION INITIALIZATION (FIX) ---
 // This handles direct link access (e.g., /#funds-page) and browser history (back/forward)
 document.addEventListener('DOMContentLoaded', function() {

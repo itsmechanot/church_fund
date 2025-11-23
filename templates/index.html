@@ -462,69 +462,68 @@
     <!-- ABOUT -->
     <section class="page" id="about-page">
         <div class="slide-up-container">
-            <h2>Organizational Chart</h2>
-            <div class="org-chart">
-                <div class="tree">
-                    <!-- Level 1: Pastor -->
-                    <div class="tree-level level-1">
-                        <div class="tree-node">
-                            <div class="box">
-                                <img src="pastor.jpg" alt="Pastor">
-                                <strong>Rev. John Smith</strong>
-                                <div class="role">Senior Pastor</div>
-                            </div>
-                        </div>
+            <h2 class="about-title">About Parish Core</h2>
+            
+            <div class="about-grid">
+                <div class="about-card" onclick="openAboutModal('logo')">
+                    <div class="about-icon">
+                        <i class="fas fa-church"></i>
                     </div>
-                    
-                    <!-- Level 2: Secretary & Treasurer -->
-                    <div class="tree-level level-2">
-                        <div class="tree-node">
-                            <div class="box">
-                                <img src="secretary.jpg" alt="Secretary">
-                                <strong>Mary Johnson</strong>
-                                <div class="role">Church Secretary</div>
-                            </div>
-                        </div>
-                        <div class="tree-node">
-                            <div class="box">
-                                <img src="treasurer.jpg" alt="Treasurer">
-                                <strong>Robert Davis</strong>
-                                <div class="role">Church Treasurer</div>
-                            </div>
-                        </div>
+                    <h3>Our Logo</h3>
+                    <p>Discover the meaning behind our church identity</p>
+                </div>
+                
+                <div class="about-card" onclick="openAboutModal('poster')">
+                    <div class="about-icon">
+                        <i class="fas fa-image"></i>
                     </div>
-                    
-                    <!-- Level 3: Churches -->
-                    <div class="tree-level level-3">
-                        <div class="tree-node">
-                            <div class="box">
-                                <img src="church1.jpg" alt="Church 1">
-                                <strong>St. Mary's Parish</strong>
-                                <div class="role">Downtown Branch</div>
-                            </div>
-                        </div>
-                        <div class="tree-node">
-                            <div class="box">
-                                <img src="church2.jpg" alt="Church 2">
-                                <strong>St. Peter's Chapel</strong>
-                                <div class="role">Eastside Branch</div>
-                            </div>
-                        </div>
-                        <div class="tree-node">
-                            <div class="box">
-                                <img src="church3.jpg" alt="Church 3">
-                                <strong>St. Luke's Church</strong>
-                                <div class="role">Westside Branch</div>
-                            </div>
-                        </div>
-                        <div class="tree-node">
-                            <div class="box">
-                                <img src="church4.jpg" alt="Church 4">
-                                <strong>St. Mark's Parish</strong>
-                                <div class="role">Northside Branch</div>
-                            </div>
-                        </div>
+                    <h3>Church Poster</h3>
+                    <p>View our community announcements and events</p>
+                </div>
+                
+                <div class="about-card" onclick="openAboutModal('video')">
+                    <div class="about-icon">
+                        <i class="fas fa-play-circle"></i>
                     </div>
+                    <h3>Promotional Video</h3>
+                    <p>Watch our church story and mission</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- About Modals -->
+        <div class="about-modal" id="logoModal">
+            <div class="about-modal-content">
+                <span class="about-close" onclick="closeAboutModal('logo')">&times;</span>
+                <div class="about-modal-body">
+                    <img src="{% static 'img/Church_fund_logo.png' %}" alt="Parish Core Logo" class="modal-logo">
+                    <h3>Our Church Logo</h3>
+                    <p>The Parish Core logo represents our commitment to faith, community, and stewardship. The design symbolizes unity, growth, and our dedication to serving God and our congregation.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="about-modal" id="posterModal">
+            <div class="about-modal-content">
+                <span class="about-close" onclick="closeAboutModal('poster')">&times;</span>
+                <div class="about-modal-body">
+                    <img src="{% static 'img/poster.jpg' %}" alt="Church Poster" class="modal-poster">
+                    <h3>Community Events & Announcements</h3>
+                    <p>Stay connected with our church community through our latest announcements, upcoming events, and special services. Join us in fellowship and worship.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="about-modal" id="videoModal">
+            <div class="about-modal-content">
+                <span class="about-close" onclick="closeAboutModal('video')">&times;</span>
+                <div class="about-modal-body">
+                    <video controls class="modal-video">
+                        <source src="{% static 'vid/promotional_vid.mp4' %}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h3>Our Church Story</h3>
+                    <p>Watch our promotional video to learn more about Parish Core, our mission, values, and the vibrant community that makes our church a home for all.</p>
                 </div>
             </div>
         </div>
