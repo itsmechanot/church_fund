@@ -198,7 +198,7 @@ def index(request):
     else:
         avg_monthly_growth = Decimal('0.00')
         
-    recent_transactions = Transaction.objects.all().select_related('fund').order_by('-transaction_date')[:5]
+    recent_transactions = Transaction.objects.filter(status='ACTIVE').select_related('fund').order_by('-transaction_date')[:5]
     
     context = {
         'funds': funds,
@@ -381,7 +381,7 @@ def transactions_list_view(request):
     # 1. Base Query: Prefetch related data to prevent N+1 queries in the template
     transactions_queryset = Transaction.objects.all() \
         .order_by('-transaction_date', '-id') \
-        .select_related('fund', 'created_by') \
+        .select_related('fund', 'created_by', 'original_transaction') \
         .prefetch_related('splits__fund') 
 
     all_funds = Fund.objects.all().order_by('name')
@@ -867,9 +867,9 @@ def create_admin_view(request):
 @require_POST
 @transaction.atomic
 def undo_transaction(request, transaction_id):
-    """Undo a transaction by reversing its effects on fund balances"""
+    """Undo a transaction by creating reversal transactions"""
     try:
-        trans = get_object_or_404(Transaction, pk=transaction_id)
+        trans = get_object_or_404(Transaction, pk=transaction_id, status='ACTIVE')
         
         # Check if transaction was created within last 5 minutes (safety measure)
         time_limit = timezone.now() - timedelta(minutes=5)
@@ -877,15 +877,48 @@ def undo_transaction(request, transaction_id):
             messages.error(request, "Cannot undo transactions older than 5 minutes for security reasons.")
             return redirect(reverse('index') + '#funds-page')
         
+        # Mark original transaction as reverted
+        trans.status = 'REVERTED'
+        trans.save(update_fields=['status'])
+        
         # Handle split transactions
         if trans.splits.exists():
+            # Create reversal transaction for split
+            reversal_trans = Transaction.objects.create(
+                transaction_type='WITHDRAWAL' if trans.transaction_type == 'OFFERING' else 'OFFERING',
+                amount=trans.amount,
+                fund=None,
+                description=f"REVERSAL: {trans.description}",
+                created_by=request.user,
+                original_transaction=trans
+            )
+            
             for split in trans.splits.all():
                 # Reverse the fund balance changes
                 split.fund.current_balance = F('current_balance') - split.amount_allocated
                 split.fund.save(update_fields=['current_balance'])
+                
+                # Create reversal split
+                TransactionSplit.objects.create(
+                    parent_transaction=reversal_trans,
+                    fund=split.fund,
+                    amount_allocated=split.amount_allocated
+                )
         
         # Handle single fund transactions
         elif trans.fund:
+            reversal_type = 'WITHDRAWAL' if trans.transaction_type == 'OFFERING' else 'OFFERING'
+            
+            # Create reversal transaction
+            Transaction.objects.create(
+                transaction_type=reversal_type,
+                amount=trans.amount,
+                fund=trans.fund,
+                description=f"REVERSAL: {trans.description}",
+                created_by=request.user,
+                original_transaction=trans
+            )
+            
             if trans.transaction_type == 'OFFERING':
                 # Reverse offering by subtracting amount
                 trans.fund.current_balance = F('current_balance') - trans.amount
@@ -894,10 +927,7 @@ def undo_transaction(request, transaction_id):
                 trans.fund.current_balance = F('current_balance') + trans.amount
             trans.fund.save(update_fields=['current_balance'])
         
-        # Delete the transaction
-        trans.delete()
-        
-        messages.success(request, f"Transaction of ₱{trans.amount:,.2f} has been successfully undone.")
+        messages.success(request, f"Transaction of ₱{trans.amount:,.2f} has been successfully reverted and recorded in history.")
         
     except Exception as e:
         messages.error(request, f"Error undoing transaction: {e}")

@@ -698,6 +698,16 @@ h1, h2 {
             font-size: 0.7rem;
         }
 
+        .reverted-label {
+            color: #6c757d;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .reverted-label i {
+            font-size: 0.7rem;
+        }
+
     /* Enhanced withdrawal styles - scoped to the section */
     #withdraw-page .withdraw-enhanced {
         background: #ffffff;
