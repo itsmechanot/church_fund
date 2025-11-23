@@ -21,6 +21,7 @@ urlpatterns = [
     path('funds/deposit/', views.deposit_to_funds, name='deposit_to_funds'),
     path('funds/save_split/', views.save_default_split, name='save_default_split'),
     path('transactions/delete/<int:pk>/', views.delete_transaction_view, name='delete_transaction'),
+    path('transactions/undo/<int:transaction_id>/', views.undo_transaction, name='undo_transaction'),
 
     path('super-admin/transactions/', views.admin_transactions_view, name='admin_transactions_dashboard'),
     path('super-admin/approve/<int:pk>/', views.approve_treasurer, name='approve_treasurer'),

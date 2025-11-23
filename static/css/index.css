@@ -649,6 +649,55 @@ h1, h2 {
             color: #6c757d;
         }
 
+        /* Recent Transactions Undo Styles */
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex: 1;
+        }
+
+        .undo-form {
+            margin: 0;
+            padding: 0;
+        }
+
+        .undo-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .undo-btn:hover {
+            background: #c82333;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+        }
+
+        .undo-btn i {
+            font-size: 0.7rem;
+        }
+
     /* Enhanced withdrawal styles - scoped to the section */
     #withdraw-page .withdraw-enhanced {
         background: #ffffff;

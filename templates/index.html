@@ -194,13 +194,23 @@
                             <ul class="recent-list">
                                 {% for transaction in recent_transactions|slice:":4" %} 
                                 <li class="list-item transaction-{{ transaction.transaction_type|lower }}">
+                                    <div class="transaction-info">
+                                        <span class="list-type">{{ transaction.transaction_type|title|slice:":8" }}</span>
+                                        
+                                        <span class="list-amount">
+                                            {% if transaction.transaction_type == 'OFFERING' %}+{% else %}-{% endif %}
+                                            ₱{{ transaction.amount|floatformat:0|intcomma }}
+                                        </span>
+                                    </div>
                                     
-                                    <span class="list-type">{{ transaction.transaction_type|title|slice:":8" }}</span>
-                                    
-                                    <span class="list-amount">
-                                        {% if transaction.transaction_type == 'OFFERING' %}+{% else %}-{% endif %}
-                                        ₱{{ transaction.amount|floatformat:0|intcomma }}
-                                    </span>
+                                    {% if user.is_authenticated %}
+                                    <form method="POST" action="{% url 'undo_transaction' transaction.id %}" class="undo-form" onsubmit="return confirm('Are you sure you want to undo this transaction?')">
+                                        {% csrf_token %}
+                                        <button type="submit" class="undo-btn" title="Undo Transaction">
+                                            <i class="fas fa-undo"></i>
+                                        </button>
+                                    </form>
+                                    {% endif %}
                                 </li>
                                 {% endfor %}
                             </ul>

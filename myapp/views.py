@@ -863,6 +863,47 @@ def create_admin_view(request):
     
     return render(request, 'create_admin.html')
 
+@login_required
+@require_POST
+@transaction.atomic
+def undo_transaction(request, transaction_id):
+    """Undo a transaction by reversing its effects on fund balances"""
+    try:
+        trans = get_object_or_404(Transaction, pk=transaction_id)
+        
+        # Check if transaction was created within last 5 minutes (safety measure)
+        time_limit = timezone.now() - timedelta(minutes=5)
+        if trans.transaction_date < time_limit:
+            messages.error(request, "Cannot undo transactions older than 5 minutes for security reasons.")
+            return redirect(reverse('index') + '#funds-page')
+        
+        # Handle split transactions
+        if trans.splits.exists():
+            for split in trans.splits.all():
+                # Reverse the fund balance changes
+                split.fund.current_balance = F('current_balance') - split.amount_allocated
+                split.fund.save(update_fields=['current_balance'])
+        
+        # Handle single fund transactions
+        elif trans.fund:
+            if trans.transaction_type == 'OFFERING':
+                # Reverse offering by subtracting amount
+                trans.fund.current_balance = F('current_balance') - trans.amount
+            else:  # WITHDRAWAL
+                # Reverse withdrawal by adding amount back
+                trans.fund.current_balance = F('current_balance') + trans.amount
+            trans.fund.save(update_fields=['current_balance'])
+        
+        # Delete the transaction
+        trans.delete()
+        
+        messages.success(request, f"Transaction of ₱{trans.amount:,.2f} has been successfully undone.")
+        
+    except Exception as e:
+        messages.error(request, f"Error undoing transaction: {e}")
+    
+    return redirect(reverse('index') + '#funds-page')
+
 def specific_multi_transaction(request):
     # This dictionary will store Fund ID -> Amount pairs
     fund_allocations = {}
