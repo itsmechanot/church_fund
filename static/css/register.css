@@ -21,7 +21,8 @@ body {
     border-radius: 20px;
     padding: 40px 35px;
     width: 100%;
-    max-width: 480px;
+    max-width: 550px;
+    min-height: 600px;
     box-shadow:
         0 10px 30px rgba(0, 0, 0, 0.08),
         0 1px 3px rgba(0, 0, 0, 0.05);
@@ -278,46 +279,59 @@ body {
 /* Mobile Styles */
 @media (max-width: 768px) {
     body {
-        padding: 10px;
+        padding: 8px;
     }
     
     .signup-container {
-        max-width: 100%;
-        padding: 50px 40px;
-        margin: 15px 0;
+        width: 95%;
+        max-width: 95%;
+        padding: 60px 45px;
+        margin: 20px auto;
+        min-height: 700px;
     }
     
     .logo h1 {
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
     
     .logo p {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
     }
     
     .form-group {
-        margin-bottom: 28px;
+        margin-bottom: 32px;
     }
     
     .form-group label {
-        font-size: 1.1rem;
-        margin-bottom: 12px;
+        font-size: 1.2rem;
+        margin-bottom: 14px;
     }
     
     .input-wrapper input {
-        padding: 18px 20px;
-        font-size: 1.2rem;
+        padding: 20px 22px;
+        font-size: 1.3rem;
+        min-height: 44px;
     }
     
     .submit-btn {
-        padding: 18px;
-        font-size: 1.2rem;
+        padding: 20px;
+        font-size: 1.3rem;
+        min-height: 44px;
     }
     
     .back-button {
         top: 20px;
         left: 20px;
-        padding: 14px 22px;
+        padding: 16px 24px;
+        font-size: 1.2rem;
+    }
+    
+    .login-section p {
+        font-size: 1.1rem;
+    }
+    
+    .login-button {
+        padding: 16px 24px;
         font-size: 1.1rem;
     }
 }
@@ -325,53 +339,57 @@ body {
 /* Small Mobile Styles */
 @media (max-width: 480px) {
     body {
-        padding: 8px;
+        padding: 5px;
     }
     
     .signup-container {
-        padding: 40px 30px;
-        margin: 8px 0;
+        width: 98%;
+        padding: 50px 35px;
+        margin: 10px auto;
+        min-height: 650px;
     }
     
     .logo h1 {
-        font-size: 2.2rem;
+        font-size: 2.8rem;
     }
     
     .logo p {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
     }
     
     .form-group {
-        margin-bottom: 25px;
+        margin-bottom: 30px;
     }
     
     .form-group label {
-        font-size: 1.05rem;
+        font-size: 1.15rem;
     }
     
     .input-wrapper input {
-        padding: 16px 18px;
-        font-size: 1.1rem;
+        padding: 18px 20px;
+        font-size: 1.25rem;
+        min-height: 44px;
     }
     
     .submit-btn {
-        padding: 17px;
-        font-size: 1.15rem;
+        padding: 19px;
+        font-size: 1.25rem;
+        min-height: 44px;
     }
     
     .back-button {
         top: 15px;
         left: 15px;
-        padding: 12px 18px;
-        font-size: 1.05rem;
+        padding: 14px 20px;
+        font-size: 1.1rem;
     }
     
     .login-section p {
-        font-size: 1rem;
+        font-size: 1.05rem;
     }
     
     .login-button {
-        padding: 14px 22px;
-        font-size: 1.05rem;
+        padding: 15px 24px;
+        font-size: 1.1rem;
     }
 }
