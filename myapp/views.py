@@ -303,7 +303,7 @@ def profile_view(request):
     # --- END STATISTICS CALCULATION ---
     
     if request.method == 'POST':
-        form = TreasurerProfileForm(request.POST, instance=treasurer)
+        form = TreasurerProfileForm(request.POST, request.FILES, instance=treasurer)
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully!')
