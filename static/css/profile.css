@@ -704,3 +704,42 @@ body {
 
     /* Stats Grid automatically collapses to 1 column due to auto-fit/minmax */
 }
+
+/* Profile Picture Upload Styles */
+.current-image {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.current-image p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.current-image a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.current-image a:hover {
+    text-decoration: underline;
+}
+
+input[type="file"] {
+    padding: 8px 12px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    background: white;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+input[type="file"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}

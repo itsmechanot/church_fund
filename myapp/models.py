@@ -19,6 +19,7 @@ class Treasurer(AbstractUser):
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     church_branch = models.CharField(max_length=100, blank=True, null=True)
     position = models.CharField(max_length=100, default='Treasurer')
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     
     groups = models.ManyToManyField(

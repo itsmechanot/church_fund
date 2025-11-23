@@ -23,7 +23,11 @@
     <div class="profile-container">
         <div class="profile-header">
             <div class="profile-avatar">
-                <img src="{% static 'img/profile.jpg' %}" alt="Logo">
+                {% if treasurer.profile_picture %}
+                    <img src="{{ treasurer.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                    <img src="{% static 'img/profile.png' %}" alt="Default Profile">
+                {% endif %}
             </div>
             <div class="profile-info">
                 <h1>{{ treasurer.get_full_name }}</h1>
@@ -51,7 +55,7 @@
                     <i class="fas fa-user-edit"></i>
                     Personal Information
                 </h2>
-                <form method="POST" class="profile-form">
+                <form method="POST" enctype="multipart/form-data" class="profile-form">
                     {% csrf_token %}
 
                     <div class="form-row">
@@ -89,6 +93,16 @@
                     <div class="form-group">
                         <label for="id_church_branch">Church Branch</label>
                         {{ form.church_branch }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_profile_picture">Profile Picture</label>
+                        {{ form.profile_picture }}
+                        {% if treasurer.profile_picture %}
+                        <div class="current-image">
+                            <p>Current: <a href="{{ treasurer.profile_picture.url }}" target="_blank">View current image</a></p>
+                        </div>
+                        {% endif %}
                     </div>
 
                     <button type="submit" class="submit-btn">Update Profile</button>

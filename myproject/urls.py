@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from myapp import views 
 
 urlpatterns = [
@@ -33,3 +35,7 @@ urlpatterns = [
     path('simple-create-admin/', views.simple_create_admin, name='simple_create_admin'),
     path('fund-debug/', views.fund_debug_view, name='fund_debug'),
 ]
+
+# Serve media files during development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

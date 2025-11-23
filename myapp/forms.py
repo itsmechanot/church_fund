@@ -16,7 +16,7 @@ class TreasurerLoginForm(AuthenticationForm):
 class TreasurerProfileForm(forms.ModelForm):
     class Meta:
         model = Treasurer
-        fields = ['first_name', 'last_name', 'age', 'sex', 'phone_number', 'church_branch', 'email']
+        fields = ['first_name', 'last_name', 'age', 'sex', 'phone_number', 'church_branch', 'email', 'profile_picture']
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -25,6 +25,7 @@ class TreasurerProfileForm(forms.ModelForm):
             'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
             'church_branch': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'profile_picture': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
         }
 
 class TransactionForm(forms.ModelForm):
