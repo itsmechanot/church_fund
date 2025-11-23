@@ -112,10 +112,9 @@
                                     {{ transaction.transaction_date|date:"M d, Y" }}
                                 </td>
                                 <td data-label="Type">
-                                    <span class="badge badge-{{ transaction.transaction_type|lower }} {% if transaction.status == 'REVERTED' %}badge-reverted{% endif %}">
+                                    <span class="badge badge-{{ transaction.transaction_type|lower }}">
                                         {% if transaction.transaction_type == 'OFFERING' %}<i class="fas fa-plus-circle"></i>{% else %}<i class="fas fa-minus-circle"></i>{% endif %}
                                         {{ transaction.transaction_type|title }}
-                                        {% if transaction.status == 'REVERTED' %} (REVERTED){% endif %}
                                     </span>
                                 </td>
                                 <td data-label="Amount">
@@ -139,9 +138,6 @@
                                     {{ transaction.created_by.get_full_name|default:"System" }}
                                 </td>
                                 <td data-label="Description">
-                                    {% if transaction.original_transaction %}
-                                        <span class="reversal-indicator"><i class="fas fa-undo"></i> REVERSAL:</span>
-                                    {% endif %}
                                     {{ transaction.description|truncatechars:70 }}
                                 </td>
                                 

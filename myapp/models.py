@@ -70,11 +70,6 @@ class Transaction(models.Model):
         ('WITHDRAWAL', 'Withdrawal'),
     ]
     
-    STATUS_CHOICES = [
-        ('ACTIVE', 'Active'),
-        ('REVERTED', 'Reverted'),
-    ]
-    
     fund = models.ForeignKey(
         'Fund', 
         on_delete=models.SET_NULL, 
@@ -86,8 +81,6 @@ class Transaction(models.Model):
     description = models.TextField()
     created_by = models.ForeignKey(Treasurer, on_delete=models.CASCADE)
     transaction_date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='ACTIVE')
-    original_transaction = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     
     def __str__(self):
         return f"{self.transaction_type} - ₱{self.amount}"
