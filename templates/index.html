@@ -368,6 +368,18 @@
                 </form>
             </div>
         </div>
+
+        <!-- Success Modal -->
+        <div class="funds-modal" id="successModal">
+            <div class="funds-modal-content success-modal">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="success-title">Transaction Undone Successfully!</h3>
+                <p class="success-message">The transaction has been reversed and fund balances have been restored.</p>
+                <button class="funds-btn funds-btn-primary" onclick="closeSuccessModal()">Continue</button>
+            </div>
+        </div>
     </section>
 
     <!-- WITHDRAW -->
@@ -530,6 +542,25 @@
         const DYNAMIC_FUND_LABELS = JSON.parse('{{ fund_labels|safe }}'.replace(/'/g, '"'));
         const DYNAMIC_FUND_BALANCES = JSON.parse('{{ fund_balances }}');
 
+    </script>
+    <script>
+        function closeSuccessModal() {
+            document.getElementById('successModal').style.display = 'none';
+            location.reload(); // Refresh to show updated balances
+        }
+
+        function showSuccessModal() {
+            document.getElementById('successModal').style.display = 'flex';
+        }
+
+        // Check for success message from Django
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success' and 'undone' in message.message or 'reverted' in message.message %}
+                    setTimeout(showSuccessModal, 500);
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     </script>
     <script src="{% static 'javascript/index.js' %}"></script>
 </body>

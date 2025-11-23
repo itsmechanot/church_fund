@@ -708,6 +708,32 @@ h1, h2 {
             font-size: 0.7rem;
         }
 
+        /* Success Modal Styles */
+        .success-modal {
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .success-title {
+            color: #28a745;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .success-message {
+            color: #6c757d;
+            font-size: 1rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
     /* Enhanced withdrawal styles - scoped to the section */
     #withdraw-page .withdraw-enhanced {
         background: #ffffff;
